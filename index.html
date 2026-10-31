@@ -6,7 +6,7 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>fob Items</title>
+<title>fob Forge</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -162,6 +162,14 @@ ul.chg li{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .rel-h{display:flex;align-items:baseline;gap:10px;font-family:var(--f-ui)}
 .rel-v{font-family:var(--f-display);font-size:20px}
 .rel-notes{margin:0;line-height:1.5;max-width:65ch}
+ol.steps{margin:0;padding-left:20px;display:grid;gap:6px;line-height:1.5;max-width:64ch}
+.sel{font-family:var(--f-mono);font-size:12.5px;user-select:all;background:var(--panel-2);padding:0 4px;border-radius:4px}
+.linkbtn{background:none;border:0;padding:0;color:var(--mana);text-decoration:underline;text-underline-offset:3px;font:inherit}
+.gh-msg{margin:0;padding:8px 12px;border-radius:8px;background:color-mix(in srgb,var(--gold) 14%,var(--panel));border:1px solid var(--line);font-family:var(--f-ui)}
+.conf{display:grid;gap:6px;padding:10px;border:1px solid var(--line);border-radius:9px}
+.conf-h{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;font-family:var(--f-ui)}
+.conf-o{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:7px;background:var(--panel-2);cursor:pointer}
+.conf-o span{display:grid;font-family:var(--f-ui)} .conf-o small{color:var(--muted)}
 .list-hint{margin:2px 8px 0;font-family:var(--f-ui);font-size:12px;color:var(--faint)}
 .li{touch-action:pan-y;cursor:grab}
 .li .on-graph{font-family:var(--f-ui);font-size:11px;font-weight:700;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:99px;padding:0 6px;line-height:16px;font-variant-numeric:tabular-nums}
@@ -261,7 +269,7 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.5;backg
 <div class="app" id="app">
   <header class="bar">
     <button class="btn icon-btn ghost only-narrow" id="btnList" aria-label="Show item list">☰</button>
-    <div class="brand"><h1>fob Items</h1><span class="count" id="count"></span></div>
+    <div class="brand"><h1>fob Forge</h1><span class="count" id="count"></span></div>
     <span class="status" id="status">Connecting</span>
     <div class="relbar" id="relbar" hidden></div>
     <button class="btn" id="btnGold">Gold values</button>
@@ -309,6 +317,9 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.5;backg
 // Viewer copies of this page (opened outside claude.ai) load the published library from this address.
 // On GitHub Pages it sits next to the page; for a downloaded copy use the file's raw GitHub link.
 const LIBRARY_URL = "fob_library.json";
+// The GitHub repo that the Pages copy reads from and publishes to ("owner/repo").
+const GITHUB_REPO = "monpied/fob-forge";
+const GITHUB_BRANCH = "main";
 // ---------- definitions ----------
 const STATS = [
   {k:"damage",label:"Damage",kv:"bonus_damage",prop:"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE",fn:"GetModifierPreAttack_BonusDamage"},
@@ -370,7 +381,7 @@ function allItems(){ return Object.keys(colOf("items").docs).map(item).filter(Bo
 const canEdit = () => (S.mode==="live" || S.mode==="local") && S.viewing!=="published";
 
 // ---------- persistence ----------
-function saveLocal(){ if(S.mode!=="local") return; try{ localStorage.setItem("fob-forge-local", JSON.stringify({items:C.items.docs,config:S.config})); }catch(e){} }
+function saveLocal(){ if(S.standalone){ saveWork(); return; } if(S.mode!=="local") return; try{ localStorage.setItem("fob-forge-local", JSON.stringify({items:C.items.docs,config:S.config})); }catch(e){} }
 function loadLocal(){ try{ const d = JSON.parse(localStorage.getItem("fob-forge-local")||"null"); if(d){ C.items.docs=d.items||d.docs||{}; S.config=Object.assign(S.config,d.config||{}); } }catch(e){} }
 
 function patchDoc(col, id, p, delay=450){
@@ -451,7 +462,7 @@ function wouldCycle(src, target){
   while(stack.length){ const c=stack.pop(); if(c===target) return true; if(seen.has(c)) continue; seen.add(c); const it=item(c); if(it) stack.push(...(it.components||[])); }
   return false;
 }
-function iconSrc(it){ return it.iconData || (it.iconId ? "/_blob/"+it.iconId : ""); }
+function iconSrc(it){ return it.iconData || (it.iconId && !S.standalone ? "/_blob/"+it.iconId : ""); }
 function tile(it, w, h, fs){
   const src = iconSrc(it);
   const letters = esc((it.name||"?").split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase());
@@ -532,13 +543,13 @@ function draw(){
   const settled = S.mode!=="connecting";
   $("#empty").hidden = !(settled && !S.open);
   const viewerEmpty = !S.isAdmin && S.db && !items.length;
-  const standaloneEmpty = S.standalone && !items.length;
+  const standaloneEmpty = S.standalone && S.loadFailed && !items.length;
   $("#btnImportLib").hidden = !standaloneEmpty;
   $("#emptyTitle").textContent = standaloneEmpty ? "Couldn't load the item library" : viewerEmpty ? "No items published yet" : items.length ? "Pick an item to see its build graph" : "Start your item library";
-  $("#emptyText").textContent = standaloneEmpty ? `The library at ${S.libUrl||"(no address set)"} couldn't be reached. Check your connection and reload, or import a fob_library.json file you were sent.` : viewerEmpty ? "The item library appears here as soon as its owner publishes the first release." : items.length
+  $("#emptyText").textContent = standaloneEmpty ? `GitHub (${GITHUB_REPO}) couldn't be reached. Check your connection and reload, or import a fob_library.json file you were sent.` : viewerEmpty ? "The item library appears here as soon as its owner publishes the first release." : items.length
     ? "Every item in the library has its own build graph. Open one, then drag other items from the library onto it to add them to its recipe."
     : "Create your first item. Components get a graph of their own too, so build T1 items first, then drag them into bigger ones.";
-  $("#btnExample").hidden = !canEdit() || items.length>0;
+  $("#btnExample").hidden = !canEdit() || items.length>0 || !!S.standalone;
   $("#btnFirst").hidden = !canEdit() || items.length>0;
   $("#btnCreate").disabled = !canEdit();
   document.getElementById("app").classList.toggle("ro", !canEdit());
@@ -1057,13 +1068,23 @@ function drawUpdates(){
   dlg.innerHTML=`<div class="dlg" role="dialog" aria-label="Item updates">
     <header><h2>Item updates</h2><button class="btn" data-x="close">Close</button></header>
     <div class="body">${S.releases.length?S.releases.map((r,i)=>`<section class="rel">
-      <div class="rel-h"><span class="rel-v">v${r.version}</span><span class="muted">${fmtDate(r.publishedAt)}</span>${i===0?`<span class="tag add">Current</span>`:""}</div>
+      <div class="rel-h"><span class="rel-v">v${r.version}</span><span class="muted">${fmtDate(r.publishedAt)}${r.by?` · by ${esc(r.by)}`:""}</span>${i===0?`<span class="tag add">Current</span>`:""}</div>
       ${r.notes?`<p class="rel-notes">${esc(r.notes)}</p>`:""}${changesHTML(r.changes||{added:[],removed:[],changed:[]})}</section>`).join(""):`<p class="note">Nothing has been published yet.</p>`}</div></div>`;
   dlg.querySelector(".dlg").addEventListener("click",e=>{ if(e.target.closest('[data-x="close"]')) closeDialog(); });
 }
 function drawReleaseBar(){
   const r=latest(), bar=$("#relbar");
-  if(!S.db && !S.standalone){ bar.hidden=true; return; }
+  if(S.standalone){
+    bar.hidden=false;
+    const n=changeCount(myChanges())+(S.base&&!same(cfgOf(S.base.config),S.config)?1:0);
+    const newer=S.remote&&S.base&&num(S.remote.version)>num(S.base.version);
+    $("#status").textContent = n ? `${n} unpublished change${n===1?"":"s"}` : "Up to date";
+    $("#status").className = "status "+(n?"warn":"live");
+    bar.innerHTML=`<button class="btn ghost sm" data-x="updates">${S.base&&S.base.version?`v${S.base.version}`:"Not published yet"}${newer?` · v${S.remote.version} online`:""}</button>
+      <button class="btn primary sm" data-x="ghpublish" ${n||!S.gh.token?"":"disabled"}>${S.gh.token?`Publish to GitHub${n?` · ${n}`:""}`:"Connect GitHub"}</button>`;
+    return;
+  }
+  if(!S.db){ bar.hidden=true; return; }
   if(S.mode==="live"){ $("#status").textContent = S.viewing==="published" ? "Viewing published" : "Your draft"; }
   bar.hidden=false;
   const pend = S.isAdmin && S.viewing==="draft" ? changeCount(pendingChanges()) : 0;
@@ -1078,6 +1099,7 @@ $("#relbar").addEventListener("click",e=>{
   if(b.dataset.view) setViewing(b.dataset.view);
   if(b.dataset.x==="updates") openUpdates();
   if(b.dataset.x==="publish") openPublish();
+  if(b.dataset.x==="ghpublish") openGhPublish();
 });
 
 // ---------- viewer library (fob_library.json) ----------
@@ -1101,26 +1123,231 @@ async function downloadLibrary(btn){
   catch(e){ if(e&&e.code!=="declined"&&e.code!=="cancelled") toast("Download didn't finish: "+((e&&e.message)||e&&e.code||"cancelled")); }
   finally{ btn.disabled=false; btn.textContent=label; }
 }
-function loadLibrary(data, {quiet=false}={}){
-  if(!data || data.format!=="fob-library" || !Array.isArray(data.items)) throw new Error("not a fob_library.json file");
-  const prev = latest() ? latest().version : null;
-  const hist=(data.releases&&data.releases.length?data.releases:[{version:data.version,publishedAt:data.publishedAt,notes:"",changes:null}]).map(r=>Object.assign({},r));
-  hist.sort((a,b)=>num(b.version)-num(a.version));
-  hist[0]=Object.assign(hist[0],{items:data.items,config:data.config||{}});
-  S.releases=hist; S.viewing="published";
-  S.config=Object.assign({prefix:"item_fob_",idStart:8000,goldRef:{},goldManual:{},bands:DEFAULT_BANDS},data.config||{});
-  loadRelease();
-  try{ localStorage.setItem("fob-forge-library", JSON.stringify(data)); }catch(e){}
-  if(!quiet && prev!==null && prev!==latest().version) toast(`Items updated to v${latest().version}`,"What changed",openUpdates);
+// ---------- shared library on GitHub (the Pages copy of this page) ----------
+// Everyone edits a working copy kept in their own browser. Publishing re-reads the newest
+// fob_library.json from the repo, merges it with your edits field by field, stops on real
+// conflicts, and commits with the file's sha, so GitHub refuses any publish that would
+// overwrite something it hasn't seen.
+const GH_API = "https://api.github.com";
+const ghRepo = () => { const [owner,repo]=(GITHUB_REPO||"").split("/"); return {owner,repo,branch:GITHUB_BRANCH||"main",path:"fob_library.json"}; };
+const emptyLibrary = () => ({format:"fob-library",version:0,publishedAt:0,config:{},items:[],releases:[]});
+S.base = null;            // the library your working copy started from
+S.remote = null;          // newest library seen online (may be newer than base)
+S.gh = {token:"", login:"", canPush:null};
+const VOLATILE = new Set(["updatedAt","createdAt","id"]);
+function canon(v){ return Array.isArray(v)?v.map(canon):v&&typeof v==="object"?Object.fromEntries(Object.keys(v).filter(k=>!VOLATILE.has(k)).sort().map(k=>[k,canon(v[k])])):v; }
+const same = (a,b) => JSON.stringify(canon(a??null))===JSON.stringify(canon(b??null));
+const itemsMap = arr => { const m={}; (arr||[]).forEach(it=>{ const o=Object.assign({},it); const id=o.id; delete o.id; delete o.fullKey; delete o.componentKeys; m[id]=o; }); return m; };
+const itemsArr = map => Object.entries(map).map(([id,o])=>Object.assign({id},o));
+const cfgOf = c => Object.assign({prefix:"item_fob_",idStart:8000,goldRef:{},goldManual:{},bands:DEFAULT_BANDS},c||{});
+
+function saveWork(){
+  try{ localStorage.setItem("fob-gh-work:"+GITHUB_REPO, JSON.stringify({base:S.base, items:C.items.docs, config:S.config})); }catch(e){}
+}
+function myChanges(){ return describeChanges((S.base&&S.base.items)||[], draftSnapshot()); }
+const hasEdits = () => changeCount(myChanges())>0 || !same(cfgOf(S.base&&S.base.config), S.config);
+function historyOf(lib){
+  const h=(lib.releases||[]).map(r=>Object.assign({},r)).sort((a,b)=>num(b.version)-num(a.version));
+  if(h[0]) h[0]=Object.assign(h[0],{items:lib.items,config:lib.config}); else if(lib.version) h.push({version:lib.version,publishedAt:lib.publishedAt,items:lib.items,config:lib.config});
+  return h;
+}
+// Make a library the new starting point: your working copy becomes exactly that library.
+function adopt(lib){
+  S.base=lib; S.remote=lib; S.releases=historyOf(lib);
+  C.items.docs=itemsMap(lib.items); S.config=cfgOf(lib.config);
+  saveWork();
   if(S.open && !item(S.open)) S.open=null;
   if(!S.open){ const top=allItems().sort((a,b)=>num(b.cost)-num(a.cost))[0]; if(top) openGraph(top.id,{push:false}); }
-  render(); redrawDialog();
+  inspFor=null; render(); redrawDialog();
 }
-async function fetchLibrary(quiet){
-  if(!S.libUrl) return false;
-  try{ const r=await fetch(S.libUrl,{cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); loadLibrary(await r.json(),{quiet}); return true; }
-  catch(e){ return false; }
+// A newer library arrived online: take it if you have no edits; otherwise keep your edits and merge at publish.
+function onRemote(lib, from){
+  if(!lib) return;
+  const prev=S.remote?num(S.remote.version):null;
+  S.remote = !S.remote || num(lib.version)>=num(S.remote.version) ? lib : S.remote;
+  if(!S.base || !hasEdits()){ if(!S.base || num(lib.version)!==num(S.base.version) || !same(lib.items,S.base.items)) adopt(lib); }
+  else render();
+  if(prev!==null && num(lib.version)>prev) toast(`v${lib.version} is online${hasEdits()?" — your edits will be merged into it when you publish":""}`,"What changed",openUpdates);
 }
+
+// --- GitHub API ---
+async function gh(path, opts={}){
+  const headers=Object.assign({"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}, S.gh.token?{"Authorization":"Bearer "+S.gh.token}:{} , opts.headers||{});
+  const r=await fetch(GH_API+path,Object.assign({cache:"no-store"},opts,{headers}));
+  let body=null; try{ body=await r.json(); }catch(e){}
+  if(!r.ok){ const err=new Error((body&&body.message)||("GitHub answered "+r.status)); err.status=r.status; throw err; }
+  return body;
+}
+const b64ToText = b64 => { const bin=atob(b64.replace(/\s/g,"")); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new TextDecoder().decode(u); };
+const textToB64 = txt => { const u=new TextEncoder().encode(txt); let s=""; for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); };
+async function readRepoLibrary(){
+  const g=ghRepo();
+  try{
+    const meta=await gh(`/repos/${g.owner}/${g.repo}/contents/${g.path}?ref=${encodeURIComponent(g.branch)}`);
+    let text = meta.content && meta.encoding==="base64" ? b64ToText(meta.content) : null;
+    if(!text){ const blob=await gh(`/repos/${g.owner}/${g.repo}/git/blobs/${meta.sha}`); text=b64ToText(blob.content); }
+    return {lib:JSON.parse(text), sha:meta.sha};
+  }catch(e){ if(e.status===404) return {lib:null, sha:null}; throw e; }
+}
+async function readPublicLibrary(){
+  const url = location.protocol==="file:" ? `https://${ghRepo().owner}.github.io/${ghRepo().repo}/${ghRepo().path}` : LIBRARY_URL;
+  const r=await fetch(url+(url.includes("?")?"&":"?")+"t="+Date.now(),{cache:"no-store"}); if(r.status===404) return null; if(!r.ok) throw new Error("HTTP "+r.status);
+  return r.json();
+}
+async function refreshRemote(){
+  try{ const lib = S.gh.token ? (await readRepoLibrary()).lib : await readPublicLibrary(); onRemote(lib||emptyLibrary()); S.loadFailed=false; return true; }
+  catch(e){ S.loadFailed=!S.base; render(); return false; }
+}
+async function connectToken(tok){
+  S.gh.token=tok.trim();
+  const u=await gh("/user"); const g=ghRepo();
+  const repo=await gh(`/repos/${g.owner}/${g.repo}`);
+  S.gh.login=u.login; S.gh.canPush=!!(repo.permissions&&repo.permissions.push);
+  try{ localStorage.setItem("fob-gh-token:"+GITHUB_REPO, S.gh.token); }catch(e){}
+  return S.gh.canPush;
+}
+function forgetToken(){ S.gh={token:"",login:"",canPush:null}; try{ localStorage.removeItem("fob-gh-token:"+GITHUB_REPO); }catch(e){} render(); }
+
+// --- three-way merge: base (what you started from), mine (your copy), theirs (newest online) ---
+function merge3(base, mine, theirs, choices={}){
+  const B=itemsMap(base.items), M=C.items.docs, T=itemsMap(theirs.items);
+  const out={}, conflicts=[], ids=new Set([...Object.keys(B),...Object.keys(M),...Object.keys(T)]);
+  for(const id of ids){
+    const b=B[id], m=M[id], t=T[id];
+    const mc=!same(b,m), tc=!same(b,t);
+    let res;
+    if(!mc) res=t; else if(!tc) res=m; else if(same(m,t)) res=m;
+    else if(choices[id]) res = choices[id]==="mine" ? m : t;
+    else if(!m||!t||!b){ conflicts.push({id, kind: !m?"you deleted it, they changed it":!t?"they deleted it, you changed it":"added twice", mine:m, theirs:t, fields:[]}); continue; }
+    else {
+      const keys=new Set([...Object.keys(b),...Object.keys(m),...Object.keys(t)]); const r={}, clash=[];
+      keys.forEach(k=>{ if(VOLATILE.has(k)) { r[k]=Math.max(num(m[k]),num(t[k]))||m[k]; return; }
+        const bm=!same(b[k],m[k]), bt=!same(b[k],t[k]);
+        if(bm&&bt&&!same(m[k],t[k])) clash.push(k);
+        r[k]= bm ? m[k] : t[k]; });
+      if(clash.length){ conflicts.push({id, kind:"both changed", mine:m, theirs:t, fields:clash}); continue; }
+      res=r;
+    }
+    if(res) out[id]=res;
+  }
+  // gold values & settings
+  const bc=cfgOf(base.config), mc=S.config, tc=cfgOf(theirs.config), cfg={}; const cfgClash=[];
+  new Set([...Object.keys(bc),...Object.keys(mc),...Object.keys(tc)]).forEach(k=>{
+    const bm=!same(bc[k],mc[k]), bt=!same(bc[k],tc[k]);
+    if(bm&&bt&&!same(mc[k],tc[k])&&!choices["__config"]) cfgClash.push(k);
+    cfg[k]= bm&&(!bt||choices["__config"]==="mine") ? mc[k] : tc[k]; });
+  if(cfgClash.length) conflicts.push({id:"__config", kind:"both changed", name:"Gold values & export settings", fields:cfgClash});
+  return {items:out, config:cfg, conflicts};
+}
+// keep every published Dota ID and internal name; new items get fresh ones
+function settleNewItems(items, theirs){
+  const T=itemsMap(theirs.items); const used=new Set(), keys=new Set(); let next=num(cfgOf(theirs.config).idStart);
+  Object.values(T).forEach(it=>{ if(num(it.dotaId)) { used.add(num(it.dotaId)); next=Math.max(next,num(it.dotaId)+2); } keys.add(it.key||slug(it.name)); });
+  const renamed=[];
+  for(const [id,it] of Object.entries(items)){
+    if(T[id]) continue;
+    if(!num(it.dotaId) || used.has(num(it.dotaId))){ it.dotaId=next; next+=2; } used.add(num(it.dotaId));
+    let k=it.key||slug(it.name), base=k, i=2; while(keys.has(k)) k=base+"_"+(i++);
+    if(k!==(it.key||slug(it.name))){ renamed.push(`${it.name}: ${S.config.prefix}${base} → ${S.config.prefix}${k}`); it.key=k; it.keyEdited=true; }
+    keys.add(k);
+  }
+  for(const it of Object.values(items)) it.components=(it.components||[]).filter(c=>items[c]);
+  return renamed;
+}
+
+// --- publish dialog ---
+let ghChoices={}, ghBusy=false, ghPending=null;
+function openGhPublish(){ closeDialog(); dlgKind="ghpublish"; ghChoices={}; ghPending=null;
+  dlg=document.createElement("div"); dlg.className="scrim"; dlg.addEventListener("click",e=>{ if(e.target===dlg&&!ghBusy) closeDialog(); });
+  document.body.appendChild(dlg); drawGhPublish(); }
+function itemLine(it){ if(!it) return "deleted"; const st=Object.entries(it.stats||{}).filter(([k,v])=>STAT[k]&&num(v)).map(([k,v])=>`+${v} ${STAT[k].label}`).join(", ");
+  return `${fmt(num(it.cost))} gold${st?" · "+st:""}${(it.components||[]).length?` · ${(it.components||[]).length} parts`:""}`; }
+function drawGhPublish(msg){
+  if(!dlg) return;
+  const ch=myChanges(), cfgChanged=!same(cfgOf(S.base&&S.base.config),S.config);
+  const notes=$("#g-notes")?.value||"";
+  const g=ghRepo();
+  let body="";
+  if(!S.gh.token){
+    body=`<p class="note" style="margin:0;max-width:64ch">Publishing writes <code>${esc(g.path)}</code> to <b>${esc(g.owner)}/${esc(g.repo)}</b> on GitHub. You need write access to that repo and a token that lets this page use it. The token stays in this browser only.</p>
+      <ol class="steps">
+        <li>Ask <b>${esc(g.owner)}</b> to add you as a collaborator on <b>${esc(g.repo)}</b> (repo Settings → Collaborators) and accept the invite.</li>
+        <li>Open <span class="sel">github.com/settings/personal-access-tokens/new</span>, set <b>Repository access</b> to <i>Only select repositories → ${esc(g.repo)}</i>, and under <b>Permissions → Repository → Contents</b> choose <i>Read and write</i>.</li>
+        <li>Generate the token and paste it here.</li></ol>
+      <label class="lbl">GitHub token<input class="field" id="g-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+      <div class="btnrow"><button class="btn primary" data-x="connect">Connect</button></div>`;
+  } else if(ghPending && ghPending.conflicts.length){
+    const T=itemsMap(ghPending.theirs.items);
+    body=`<p class="note" style="margin:0;max-width:64ch"><b>v${ghPending.theirs.version}</b> was published while you were editing, and some of the same things were changed on both sides. Pick which version to keep for each. Everything else merges by itself.</p>
+      ${ghPending.conflicts.map(c=>{ const name=c.name||((c.mine||c.theirs||{}).name)||"Item";
+        return `<div class="conf"><div class="conf-h"><b>${esc(name)}</b><span class="muted">${esc(c.kind)}${c.fields.length?": "+esc(c.fields.join(", ")):""}</span></div>
+        <label class="conf-o"><input type="radio" name="c-${c.id}" value="mine" ${ghChoices[c.id]==="mine"?"checked":""}><span><b>Keep yours</b><small>${esc(c.id==="__config"?"your gold values & settings":itemLine(c.mine))}</small></span></label>
+        <label class="conf-o"><input type="radio" name="c-${c.id}" value="theirs" ${ghChoices[c.id]==="theirs"?"checked":""}><span><b>Keep v${ghPending.theirs.version}</b><small>${esc(c.id==="__config"?"their gold values & settings":itemLine(c.theirs))}</small></span></label></div>`; }).join("")}
+      <div class="btnrow"><button class="btn primary" data-x="go" ${ghPending.conflicts.every(c=>ghChoices[c.id])?"":"disabled"}>Publish merged version</button><button class="btn" data-x="close">Cancel</button></div>`;
+  } else {
+    body=`<p class="note" style="margin:0">Signed in as <b>${esc(S.gh.login)}</b>${S.gh.canPush===false?` · <span style="color:var(--danger)">this account can't write to ${esc(g.owner)}/${esc(g.repo)} yet</span>`:""} · <button class="linkbtn" data-x="forget">Forget token</button></p>
+      <h4 class="sub-h">Your changes since v${S.base?S.base.version:0}</h4>
+      ${changesHTML(ch)}${cfgChanged?`<p class="note" style="margin:0">Gold values or export settings changed too.</p>`:""}
+      <label class="lbl">Notes (optional)<textarea class="field" id="g-notes" placeholder="What you changed and why">${esc(notes)}</textarea></label>
+      <div class="btnrow"><button class="btn primary" data-x="go" ${changeCount(ch)||cfgChanged?"":"disabled"}>Publish to GitHub</button>
+      ${changeCount(ch)||cfgChanged?`<button class="btn danger" data-x="discard">Discard my changes</button>`:""}</div>`;
+  }
+  dlg.innerHTML=`<div class="dlg" role="dialog" aria-label="Publish to GitHub">
+    <header><h2>Publish to GitHub</h2>${ghBusy?"":`<button class="btn" data-x="close">Close</button>`}</header>
+    <div class="body">${msg?`<p class="gh-msg">${esc(msg)}</p>`:""}${body}</div></div>`;
+  const d=dlg.querySelector(".dlg");
+  d.addEventListener("change",e=>{ const t=e.target; if(t.name&&t.name.startsWith("c-")){ ghChoices[t.name.slice(2)]=t.value; const n=$("#g-notes")?.value; drawGhPublish(); } });
+  d.addEventListener("click",async e=>{
+    const b=e.target.closest("button"); if(!b||ghBusy) return;
+    if(b.dataset.x==="close"){ closeDialog(); return; }
+    if(b.dataset.x==="forget"){ forgetToken(); drawGhPublish(); return; }
+    if(b.dataset.x==="discard"){ if(b.dataset.armed){ adopt(S.remote&&num(S.remote.version)>=num(S.base.version)?S.remote:S.base); closeDialog(); toast("Your changes were discarded"); } else { b.dataset.armed="1"; b.textContent="Click again to discard"; } return; }
+    if(b.dataset.x==="connect"){
+      const tok=$("#g-token").value; if(!tok.trim()) return;
+      ghBusy=true; drawGhPublish("Checking the token…");
+      try{ const ok=await connectToken(tok); ghBusy=false; await refreshRemote(); drawGhPublish(ok?"":`Connected as ${S.gh.login}, but that account can't write to ${ghRepo().owner}/${ghRepo().repo}. Ask ${ghRepo().owner} to add you as a collaborator.`); }
+      catch(err){ ghBusy=false; S.gh.token=""; drawGhPublish("GitHub didn't accept that token: "+err.message); }
+      return;
+    }
+    if(b.dataset.x==="go") publishToGitHub();
+  });
+}
+async function publishToGitHub(){
+  const notes=($("#g-notes")?.value ?? (ghPending&&ghPending.notes) ?? "").trim();
+  ghBusy=true;
+  for(let attempt=0; attempt<4; attempt++){
+    drawGhPublish(attempt?"Someone published at the same moment, merging again…":"Fetching the newest library…");
+    let theirs, sha;
+    try{ const r=await readRepoLibrary(); theirs=r.lib||emptyLibrary(); sha=r.sha; }
+    catch(err){ ghBusy=false; drawGhPublish("Couldn't read the library from GitHub: "+err.message); return; }
+    const base=S.base||emptyLibrary();
+    const merged=merge3(base, null, theirs, ghChoices);
+    if(merged.conflicts.length){ ghBusy=false; ghPending={theirs,conflicts:merged.conflicts,notes}; drawGhPublish(); return; }
+    const items=JSON.parse(JSON.stringify(merged.items));
+    const renamed=settleNewItems(items, theirs);
+    const nextV=num(theirs.version)+1;
+    const newArr=itemsArr(items).sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+    const changes=describeChanges(theirs.items||[], newArr);
+    if(!changeCount(changes) && same(cfgOf(theirs.config),merged.config)){ ghBusy=false; adopt(theirs); closeDialog(); toast(`Nothing new to publish — v${theirs.version} already has all of this`); return; }
+    const lib={format:"fob-library",forge:"fob Item Forge",version:nextV,publishedAt:Date.now(),config:merged.config,items:newArr,
+      releases:[{version:nextV,publishedAt:Date.now(),by:S.gh.login,notes,changes},...(theirs.releases||[])].slice(0,200)};
+    const g=ghRepo();
+    drawGhPublish(`Publishing v${nextV}…`);
+    try{
+      await gh(`/repos/${g.owner}/${g.repo}/contents/${g.path}`,{method:"PUT",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(Object.assign({message:`Items v${nextV}${notes?": "+notes.split("\n")[0].slice(0,72):""} (by ${S.gh.login})`,content:textToB64(JSON.stringify(lib,null,1)+"\n"),branch:g.branch}, sha?{sha}:{}))});
+    }catch(err){
+      if(err.status===409||err.status===422) continue;   // the file changed since we read it: read it again and re-merge
+      ghBusy=false; drawGhPublish(err.status===403||err.status===404?`GitHub refused the publish (${err.message}). Your account needs write access to ${g.owner}/${g.repo}.`:"Publishing failed: "+err.message); return;
+    }
+    ghBusy=false; ghChoices={}; ghPending=null;
+    adopt(lib); closeDialog();
+    toast(`Published v${nextV}${renamed.length?` · renamed ${renamed.length} duplicate internal name${renamed.length===1?"":"s"}`:""}. The site updates in about a minute.`);
+    return;
+  }
+  ghBusy=false; drawGhPublish("Several people are publishing right now. Try again in a minute; nothing was overwritten.");
+}
+
 $("#btnImportLib").onclick=()=>$("#jsonFile").click();
 
 // ---------- export ----------
@@ -1314,7 +1541,7 @@ function drawExport(){
 }
 function closeDialog(){ if(dlg){ dlg.remove(); dlg=null; dlgKind=null; } }
 let dlgKind=null;
-function redrawDialog(){ if(!dlg) return; if(dlgKind==="gold") drawGold(); else if(dlgKind==="updates") drawUpdates(); else if(dlgKind==="publish") drawPublish(); else drawExport(); }
+function redrawDialog(){ if(!dlg) return; if(dlgKind==="gold") drawGold(); else if(dlgKind==="updates") drawUpdates(); else if(dlgKind==="publish") drawPublish(); else if(dlgKind==="ghpublish"){ if(!ghBusy) drawGhPublish(); } else drawExport(); }
 function openGold(){
   closeDialog(); dlgKind="gold";
   dlg=document.createElement("div"); dlg.className="scrim"; dlg.addEventListener("click",e=>{ if(e.target===dlg) closeDialog(); });
@@ -1379,7 +1606,7 @@ async function downloadZip(btn){
 }
 $("#jsonFile").addEventListener("change",async e=>{
   const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  if(S.standalone){ try{ loadLibrary(JSON.parse(await f.text())); toast("Library loaded"); }catch(err){ toast("That file isn't a fob library: "+err.message); } return; }
+  if(S.standalone){ try{ const lib=JSON.parse(await f.text()); if(lib.format!=="fob-library"||!Array.isArray(lib.items)) throw new Error("not a fob_library.json file"); if(hasEdits()) onRemote(lib); else adopt(lib); toast("Library loaded"); }catch(err){ toast("That file isn't a fob library: "+err.message); } return; }
   try{
     const data=JSON.parse(await f.text()); if(!Array.isArray(data.items)) throw new Error("no items list");
     const idMap={}; const existing=new Set(allItems().map(fullKey));
@@ -1424,14 +1651,17 @@ render();
   const openInitial=()=>{ if(S.open) return; let id=null; try{ id=localStorage.getItem("fob-forge-open"); }catch(e){}
     if(!item(id)) id=allItems().sort((a,b)=>num(b.cost)-num(a.cost))[0]?.id; if(id) openGraph(id,{push:false}); };
   const goLocal=()=>{ loadLocal(); setMode("local"); openInitial(); };
-  if((!c || !c.use) && LIBRARY_URL){
-    S.standalone=true; S.libUrl=LIBRARY_URL; S.viewing="published"; setMode("published");
-    let cached=null; try{ cached=JSON.parse(localStorage.getItem("fob-forge-library")||"null"); }catch(e){}
-    if(cached){ try{ loadLibrary(cached,{quiet:true}); }catch(e){} }
-    const ok=await fetchLibrary(!cached);
-    if(!ok && cached) toast(`Couldn't reach the library, so this is the copy from v${latest()?latest().version:"?"}.`);
+  if((!c || !c.use) && LIBRARY_URL && GITHUB_REPO){
+    S.standalone=true; S.viewing="draft"; setMode("local");
+    try{ S.gh.token=localStorage.getItem("fob-gh-token:"+GITHUB_REPO)||""; }catch(e){}
+    let work=null; try{ work=JSON.parse(localStorage.getItem("fob-gh-work:"+GITHUB_REPO)||"null"); }catch(e){}
+    if(work && work.base){ S.base=work.base; S.remote=work.base; S.releases=historyOf(work.base); C.items.docs=work.items||{}; S.config=cfgOf(work.config); render(); openInitial(); }
+    if(S.gh.token){ try{ await connectToken(S.gh.token); }catch(e){ if(e.status===401) forgetToken(); } }
+    const ok=await refreshRemote();
+    if(!ok && S.base) toast(`Couldn't reach GitHub, so you're working from v${S.base.version}. You can keep editing and publish later.`);
+    openInitial();
     let lastCheck=Date.now();
-    window.addEventListener("focus",()=>{ if(Date.now()-lastCheck>60000){ lastCheck=Date.now(); fetchLibrary(false); } });
+    window.addEventListener("focus",()=>{ if(Date.now()-lastCheck>60000 && !ghBusy){ lastCheck=Date.now(); refreshRemote(); } });
     render(); return;
   }
   if(!c || !c.use){ goLocal(); return; }
