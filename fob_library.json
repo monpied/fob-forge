@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 11,
- "publishedAt": 1793488680919,
+ "version": 12,
+ "publishedAt": 1793488856997,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -60,6 +60,78 @@
    "createdAt": 1793432127434,
    "updatedAt": 1793432127434,
    "dotaId": 8014
+  },
+  {
+   "id": "7c8096c50daf4e26",
+   "name": "Charged Hearth",
+   "key": "charged_hearth",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {
+    "int": 25,
+    "str": 25,
+    "agi": 25
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793488769068,
+   "updatedAt": 1793488769068,
+   "dotaId": 8020
+  },
+  {
+   "id": "6b6b1e1337c04d26",
+   "name": "Cloak of Time",
+   "key": "cloak_of_time",
+   "keyEdited": false,
+   "tier": "legendary",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {
+    "str": 100,
+    "agi": 100,
+    "int": 100
+   },
+   "components": [
+    "7c8096c50daf4e26",
+    "7c8096c50daf4e26",
+    "7c8096c50daf4e26"
+   ],
+   "passive": {
+    "name": "Roll back the clock",
+    "desc": "Reduced attacks speeds of enemies attacking you by 20%"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793488640954,
+   "updatedAt": 1793488640954,
+   "dotaId": 8018
   },
   {
    "id": "233c58f1c9f64feb",
@@ -188,6 +260,20 @@
   }
  ],
  "releases": [
+  {
+   "version": 12,
+   "publishedAt": 1793488856997,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Charged Hearth",
+     "Cloak of Time"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 11,
    "publishedAt": 1793488680919,
