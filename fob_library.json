@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 8,
- "publishedAt": 1793432141891,
+ "version": 9,
+ "publishedAt": 1793432142091,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -91,6 +91,36 @@
    "updatedAt": 1793432054641,
    "iconData": "",
    "dotaId": 8008
+  },
+  {
+   "id": "562c52ed36a9432f",
+   "name": "68",
+   "key": "68_2",
+   "keyEdited": true,
+   "tier": "component",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {},
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793432127434,
+   "updatedAt": 1793432127434,
+   "dotaId": 8014
   },
   {
    "id": "e0283d65dafc40f1",
@@ -249,6 +279,19 @@
   }
  ],
  "releases": [
+  {
+   "version": 9,
+   "publishedAt": 1793432142091,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "68"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 8,
    "publishedAt": 1793432141891,
