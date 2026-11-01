@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 30,
- "publishedAt": 1793507936873,
+ "version": 31,
+ "publishedAt": 1793508501779,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -181,6 +181,42 @@
    "dotaId": 8024
   },
   {
+   "id": "adf673e2d5b24922",
+   "name": "Brain Amalgan",
+   "key": "brain_amalgan",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "",
+   "cost": 1850,
+   "iconId": "",
+   "stats": {
+    "int": 35
+   },
+   "components": [
+    "ced8bccf53e6423e",
+    "ced8bccf53e6423e",
+    "ced8bccf53e6423e"
+   ],
+   "passive": {
+    "name": "Brain Power",
+    "desc": "Gain 1 intellect on kill (max 10)"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793508069547,
+   "updatedAt": 1793508069547,
+   "dotaId": 8062
+  },
+  {
    "id": "8ee0f6d6ff074b96",
    "name": "Brown Socks",
    "key": "brown_socks",
@@ -251,7 +287,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 3000,
+   "cost": 3800,
    "iconId": "",
    "stats": {
     "all_stats": 25
@@ -285,7 +321,7 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 10000,
+   "cost": 12000,
    "iconId": "",
    "stats": {
     "all_stats": 75
@@ -645,7 +681,7 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 7000,
+   "cost": 7600,
    "iconId": "",
    "stats": {
     "spell_lifesteal": 25,
@@ -710,13 +746,50 @@
    "dotaId": 8044
   },
   {
+   "id": "eeecf34c7c854009",
+   "name": "Omniscient Brain ",
+   "key": "omniscient_brain",
+   "keyEdited": false,
+   "tier": "legendary",
+   "category": "",
+   "cost": 5500,
+   "iconId": "",
+   "stats": {
+    "int": 60,
+    "affinity": 100,
+    "mana_regen": 10
+   },
+   "components": [
+    "adf673e2d5b24922",
+    "812c3ebe661c4ce0"
+   ],
+   "passive": {
+    "name": "Brain Power",
+    "desc": "Gain 2 intellect on kill (max 30)"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793508293122,
+   "updatedAt": 1793508293122,
+   "dotaId": 8064
+  },
+  {
    "id": "812c3ebe661c4ce0",
    "name": "Orb of Darkness",
    "key": "orb_of_darkness",
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 1400,
+   "cost": 1750,
    "iconId": "",
    "stats": {
     "affinity": 60,
@@ -882,6 +955,45 @@
   }
  ],
  "releases": [
+  {
+   "version": 31,
+   "publishedAt": 1793508501779,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Brain Amalgan",
+     "Omniscient Brain "
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Charged Gemstone",
+      "lines": [
+       "cost 3,000 → 3,800"
+      ]
+     },
+     {
+      "name": "Cloak of Time",
+      "lines": [
+       "cost 10,000 → 12,000"
+      ]
+     },
+     {
+      "name": "NightSword",
+      "lines": [
+       "cost 7,000 → 7,600"
+      ]
+     },
+     {
+      "name": "Orb of Darkness",
+      "lines": [
+       "cost 1,400 → 1,750"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 30,
    "publishedAt": 1793507936873,
