@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 24,
- "publishedAt": 1793505461733,
+ "version": 25,
+ "publishedAt": 1793505507865,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -731,7 +731,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 1950,
+   "cost": 1900,
    "iconId": "",
    "stats": {
     "armor": 15,
@@ -796,6 +796,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 25,
+   "publishedAt": 1793505507865,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Paladin Armor",
+      "lines": [
+       "cost 1,950 → 1,900"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 24,
    "publishedAt": 1793505461733,
