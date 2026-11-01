@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 34,
- "publishedAt": 1793511274453,
+ "version": 35,
+ "publishedAt": 1793511349100,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -853,7 +853,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "\"Faith can protect you as much as an armor\" -Balthazar the HopeBringer",
    "createdAt": 1793504114986,
    "updatedAt": 1793504114986,
    "dotaId": 8046
@@ -992,6 +992,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 35,
+   "publishedAt": 1793511349100,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Paladin Armor",
+      "lines": [
+       "lore updated"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 34,
    "publishedAt": 1793511274453,
