@@ -151,9 +151,47 @@ button{cursor:pointer}
 .n-foot button+button{flex:none;border-left:1px dashed var(--line-2);color:var(--muted)}
 .n-foot button:hover{background:var(--mana-soft);color:var(--fg)}
 .n-foot button:first-child{border-bottom-left-radius:9px} .n-foot button:last-child{border-bottom-right-radius:9px}
-.port{cursor:default;pointer-events:none}
+.port{cursor:crosshair}
+.port:hover,.port.live{background:var(--mana);transform:scale(1.25)}
+.edges path.temp{fill:none;stroke:var(--mana);stroke-width:2.5;stroke-dasharray:6 5}
 .hist{display:inline-flex;gap:4px}
 .hist .btn{font-size:17px;line-height:1}
+.catbtn{display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:34px;width:100%;text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:4px 26px 4px 6px;position:relative;font-family:var(--f-ui);font-size:13px;font-weight:500;letter-spacing:0;color:var(--fg)}
+button.catbtn:hover,button.catbtn[aria-expanded="true"]{border-color:var(--mana)}
+.catbtn .caret{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:11px}
+.catbtn .muted{padding:0 3px}
+.cat-chip{background:var(--mana-soft);border:1px solid color-mix(in srgb,var(--mana) 35%,transparent);color:var(--fg);border-radius:99px;padding:1px 8px;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap}
+.catmenu{position:fixed;z-index:35;background:var(--panel);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;font-family:var(--f-ui)}
+.cm-h{display:flex;align-items:baseline;gap:8px;padding:10px 8px 8px 12px;border-bottom:1px solid var(--line)}
+.cm-h b{font-size:14px} .cm-h .muted{font-size:12px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-list{overflow:auto;padding:6px;display:grid;gap:2px;min-height:0}
+.cm-row{display:flex;align-items:center;gap:6px;border-radius:7px;padding:2px 4px}
+.cm-row:hover{background:var(--panel-2)}
+.cm-row.on{background:var(--mana-soft)}
+.cm-row label{display:flex;align-items:center;gap:8px;flex:1;min-width:0;cursor:pointer;padding:5px 2px;font-size:14px;font-weight:600}
+.cm-row label span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm-row label small{color:var(--faint);font-variant-numeric:tabular-nums;font-weight:500}
+.cm-acts{display:flex;gap:2px;opacity:.55}
+.cm-row:hover .cm-acts,.cm-row:focus-within .cm-acts{opacity:1}
+.cm-acts button{background:none;border:0;border-radius:5px;padding:3px 6px;font-size:12px;color:var(--muted)}
+.cm-acts button:hover{background:var(--panel);color:var(--fg)}
+.cm-acts button[disabled]{opacity:.3;cursor:default}
+.cm-acts button.armed{color:var(--danger);font-weight:700}
+.cm-row.editing{padding:4px} .cm-row.editing .field{flex:1;min-width:0;padding:5px 8px}
+.cm-new{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}
+.cm-new .field{flex:1;min-width:0;padding:6px 9px}
+.cm-foot{margin:0;padding:0 12px 9px;font-size:11.5px;color:var(--faint)}
+.partmenu{position:fixed;z-index:36;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;font-family:var(--f-ui)}
+.pm-h{padding:10px 12px 6px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.partmenu #pm-q{margin:0 8px 6px;width:auto}
+.pm-list{overflow:auto;padding:0 6px 6px;min-height:0;display:grid;gap:1px;align-content:start}
+.pm-row{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:7px;cursor:pointer}
+.pm-row[data-on]{background:var(--mana-soft)}
+.pm-row .nm{flex:1;min-width:0;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-row .nm small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.pm-row .gold{font-size:12.5px}
+.pm-new .plus{width:28px;height:20px;display:grid;place-items:center;border:1px dashed var(--line-2);border-radius:4px;color:var(--mana);font-weight:700}
+.pm-foot{margin:0;padding:6px 12px 8px;border-top:1px solid var(--line);font-size:11px;color:var(--faint)}
 .relbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .seg-sm{grid-template-columns:auto auto;width:auto}
 .seg-sm button{padding:4px 10px;font-size:12.5px}
@@ -306,7 +344,7 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.5;backg
           </div>
         </div>
       </div>
-      <div class="hint" id="hint">Drag items from the library onto a card to add them to its recipe · drag cards to move them · double-click a card to open its own graph · X or Delete removes the selected part · Ctrl+Z undo, Ctrl+X redo</div>
+      <div class="hint" id="hint">Drag a ● socket to add a part · drag library items onto cards · drag cards to move them · double-click to open · Ctrl+Z undo, Ctrl+X redo</div>
       <div class="zoom">
         <button class="btn icon-btn" id="zOut" aria-label="Zoom out">−</button>
         <button class="btn icon-btn" id="zFit" aria-label="Fit all items">⤢</button>
@@ -518,7 +556,7 @@ function writeFailed(e){
 }
 
 function blankItem(){
-  return {name:"New item", key:"", keyEdited:false, tier:"component", category:"", cost:300, iconId:"",
+  return {name:"New item", key:"", keyEdited:false, tier:"component", category:"", categories:[], cost:300, iconId:"",
     stats:{}, components:[], passive:{name:"",desc:""}, active:{on:false,name:"",desc:"",behavior:"no_target",cooldown:20,mana:0,range:0},
     values:[], lore:""};
 }
@@ -536,10 +574,108 @@ function uniqueKeyFor(id, name){
   while(used.has(k)) k = base+"_"+(i++);
   return k;
 }
+// ---------- shop categories ----------
+// The list lives in the settings (shared like gold values); each item keeps an array of the ones it's in.
+const DEFAULT_CATS=["Starter","Fighter","Mage","Tank","Support","Boots","Consumable"];
+const catsOf = it => Array.isArray(it.categories) ? it.categories.filter(Boolean) : (it.category ? [it.category] : []);
+function catList(){
+  if(Array.isArray(S.config.categories)) return S.config.categories;
+  const used=[]; allItems().forEach(i=>catsOf(i).forEach(c=>{ if(!used.includes(c)) used.push(c); }));
+  return [...DEFAULT_CATS, ...used.filter(c=>!DEFAULT_CATS.includes(c))];
+}
+const setItemCats = (id, cats) => patch(id,{categories:cats, category:cats[0]||""},0);
+function addCategory(name){
+  name=String(name||"").trim().replace(/\s+/g," "); if(!name) return null;
+  const list=catList(); const hit=list.find(c=>c.toLowerCase()===name.toLowerCase()); if(hit) return hit;
+  saveConfig({categories:[...list,name]}); return name;
+}
+function renameCategory(from, to){
+  to=String(to||"").trim().replace(/\s+/g," "); if(!to || to===from) return;
+  const list=catList(); if(list.some(c=>c!==from && c.toLowerCase()===to.toLowerCase())){ toast(`There's already a category called ${to}.`); return; }
+  saveConfig({categories:list.map(c=>c===from?to:c)});
+  allItems().forEach(i=>{ const c=catsOf(i); if(c.includes(from)) setItemCats(i.id, c.map(x=>x===from?to:x)); });
+}
+function deleteCategory(name){
+  saveConfig({categories:catList().filter(c=>c!==name)});
+  let n=0; allItems().forEach(i=>{ const c=catsOf(i); if(c.includes(name)){ n++; setItemCats(i.id, c.filter(x=>x!==name)); } });
+  toast(`Deleted the ${name} category${n?` and removed it from ${n} item${n===1?"":"s"}`:""}`,"Undo",undo);
+}
+function moveCategory(name, dir){
+  const list=[...catList()], i=list.indexOf(name), j=i+dir; if(i<0||j<0||j>=list.length) return;
+  [list[i],list[j]]=[list[j],list[i]]; saveConfig({categories:list});
+}
+function catChips(it){
+  const c=catsOf(it);
+  return c.length ? c.map(x=>`<span class="cat-chip">${esc(x)}</span>`).join("") : `<span class="muted">None</span>`;
+}
+
+// popup menu, opened from the item panel
+let catMenu=null; // {itemId, editing, armed}
+function openCatMenu(itemId){ catMenu={itemId, editing:null, armed:null}; drawCatMenu(); setTimeout(()=>$("#cm-new")?.focus(),30); }
+function closeCatMenu(){ catMenu=null; $("#catmenu")?.remove(); }
+function drawCatMenu(){
+  if(!catMenu) return;
+  const it=item(catMenu.itemId); if(!it || !canEdit()){ closeCatMenu(); return; }
+  let el=$("#catmenu");
+  if(!el){ el=document.createElement("div"); el.id="catmenu"; el.className="catmenu"; el.setAttribute("role","dialog"); el.setAttribute("aria-label","Shop categories"); document.body.appendChild(el); wireCatMenu(el); }
+  const mine=catsOf(it), list=catList();
+  el.innerHTML=`<div class="cm-h"><b>Shop categories</b><span class="muted">${esc(it.name)} is in ${mine.length||"none"}</span><button class="x" data-cm="close" aria-label="Close">×</button></div>
+    <div class="cm-list">${list.map((c,i)=>{ const on=mine.includes(c), uses=allItems().filter(x=>catsOf(x).includes(c)).length;
+      return catMenu.editing===c
+        ? `<div class="cm-row editing"><input class="field" id="cm-ren" value="${esc(c)}" aria-label="New name for ${esc(c)}"><button class="btn sm primary" data-cm="ren-ok" data-c="${esc(c)}">Save</button><button class="btn sm ghost" data-cm="ren-x">Cancel</button></div>`
+        : `<div class="cm-row ${on?"on":""}"><label><input type="checkbox" data-cm="tog" data-c="${esc(c)}" ${on?"checked":""}><span>${esc(c)}</span><small>${uses}</small></label>
+          <span class="cm-acts"><button data-cm="up" data-c="${esc(c)}" aria-label="Move ${esc(c)} up" ${i===0?"disabled":""}>↑</button><button data-cm="down" data-c="${esc(c)}" aria-label="Move ${esc(c)} down" ${i===list.length-1?"disabled":""}>↓</button><button data-cm="ren" data-c="${esc(c)}" aria-label="Rename ${esc(c)}">Rename</button><button data-cm="del" data-c="${esc(c)}" class="${catMenu.armed===c?"armed":""}" aria-label="Delete ${esc(c)}">${catMenu.armed===c?`Delete${uses?` from ${uses}`:""}?`:"Delete"}</button></span></div>`; }).join("") || `<p class="note" style="margin:6px 4px">No categories yet.</p>`}</div>
+    <form class="cm-new" id="cm-form"><input class="field" id="cm-new" placeholder="New category" autocomplete="off" maxlength="40"><button class="btn sm primary" type="submit">Add</button></form>
+    <p class="cm-foot">Changes apply right away${S.standalone?"":S.db?" for everyone":""}. Tick as many as fit.</p>`;
+  placeCatMenu(el);
+  if(catMenu.editing) setTimeout(()=>{ const f=$("#cm-ren"); if(f){ f.focus(); f.select(); } },20);
+}
+function placeCatMenu(el){
+  const b=$("#f-catbtn"); const r=b?b.getBoundingClientRect():{left:innerWidth/2-150,bottom:120,right:innerWidth/2+150};
+  const w=Math.min(340, innerWidth-24);
+  let left=Math.min(Math.max(12,r.right-w), innerWidth-w-12), top=r.bottom+6;
+  el.style.width=w+"px"; el.style.left=left+"px"; el.style.top=top+"px"; el.style.maxHeight=Math.max(220, innerHeight-top-16)+"px";
+  if(top+260>innerHeight){ el.style.top=Math.max(12, r.top-6-Math.min(el.scrollHeight, innerHeight-24))+"px"; el.style.maxHeight=(innerHeight-24)+"px"; }
+}
+function wireCatMenu(el){
+  el.addEventListener("change",e=>{
+    const t=e.target; if(t.dataset.cm!=="tog" || !catMenu) return;
+    const it=item(catMenu.itemId); if(!it) return;
+    const c=t.dataset.c, cur=catsOf(it);
+    const next = t.checked ? catList().filter(x=>cur.includes(x)||x===c) : cur.filter(x=>x!==c);
+    setItemCats(it.id,next); inspFor=null; render(); drawCatMenu();
+  });
+  el.addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b || !catMenu || !b.dataset.cm) return;   // the Add button submits the form
+    const a=b.dataset.cm, c=b.dataset.c;
+    if(a!=="del") catMenu.armed=null;
+    if(a==="close"){ closeCatMenu(); return; }
+    if(a==="up"||a==="down"){ moveCategory(c, a==="up"?-1:1); }
+    if(a==="ren"){ catMenu.editing=c; }
+    if(a==="ren-x"){ catMenu.editing=null; }
+    if(a==="ren-ok"){ renameCategory(c, $("#cm-ren").value); catMenu.editing=null; }
+    if(a==="del"){ if(catMenu.armed===c){ catMenu.armed=null; deleteCategory(c); } else catMenu.armed=c; }
+    inspFor=null; render(); drawCatMenu();
+  });
+  el.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){ e.stopPropagation(); if(catMenu&&catMenu.editing){ catMenu.editing=null; drawCatMenu(); } else closeCatMenu(); $("#f-catbtn")?.focus(); }
+    if(e.key==="Enter" && e.target.id==="cm-ren"){ e.preventDefault(); renameCategory(catMenu.editing, e.target.value); catMenu.editing=null; inspFor=null; render(); drawCatMenu(); }
+  });
+  el.addEventListener("submit",e=>{
+    e.preventDefault(); if(!catMenu) return;
+    const name=addCategory($("#cm-new").value); if(!name) return;
+    const it=item(catMenu.itemId); if(it && !catsOf(it).includes(name)) setItemCats(it.id, catList().filter(x=>catsOf(it).includes(x)||x===name));
+    inspFor=null; render(); drawCatMenu(); setTimeout(()=>{ const f=$("#cm-new"); if(f){ f.value=""; f.focus(); } },30);
+  });
+}
+document.addEventListener("pointerdown",e=>{ if(catMenu && !e.target.closest("#catmenu,#f-catbtn")) closeCatMenu(); },true);
+window.addEventListener("resize",()=>{ const el=$("#catmenu"); if(el) placeCatMenu(el); });
+
 function fillValues(it, text){
   const vals={}; (it.values||[]).forEach(v=>{ if(v.key) vals[v.key]=v.value; });
   return esc(text||"").replace(/%([\w]+)%/g,(m,k)=>k in vals?`<b>${esc(vals[k])}</b>`:m).replace(/\n/g,"<br>");
 }
+const recipeCount = (itemId, compId) => (((item(itemId)||{}).components)||[]).filter(x=>x===compId).length;
 function countBy(arr){ const m={}; arr.forEach(x=>m[x]=(m[x]||0)+1); return m; }
 function compCost(it){ return (it.components||[]).reduce((a,c)=>a+num((item(c)||{}).cost),0); }
 function usedIn(id){ return allItems().filter(x=>(x.components||[]).includes(id)); }
@@ -682,7 +818,10 @@ function draw(){
   $("#btnCreate").disabled = !canEdit();
   document.getElementById("app").classList.toggle("ro", !canEdit());
   $("#hint").hidden = !canEdit();
+  if(catMenu && (catMenu.itemId!==S.selItem || !canEdit())) closeCatMenu();
+  if(pm && (!canEdit() || !item(pm.host))) closePartMenu();
   drawHistoryButtons(); drawReleaseBar(); drawCrumbs(); drawList(items); drawGraph(); drawInspector();
+  if(catMenu && $("#catmenu")) placeCatMenu($("#catmenu"));
   applyView();
 }
 function drawCrumbs(){
@@ -694,7 +833,7 @@ function drawCrumbs(){
 function drawList(items){
   const q = S.q.trim().toLowerCase();
   const html = TIERS.map(([t,label])=>{
-    const rows = items.filter(i=>i.tier===t && (!q || (i.name||"").toLowerCase().includes(q) || (i.category||"").toLowerCase().includes(q)))
+    const rows = items.filter(i=>i.tier===t && (!q || (i.name||"").toLowerCase().includes(q) || catsOf(i).some(c=>c.toLowerCase().includes(q))))
       .sort((a,b)=>num(a.cost)-num(b.cost)||String(a.name).localeCompare(b.name));
     if(!rows.length) return "";
     return `<div class="group-h"><span>${label}</span><span>${rows.length}</span></div>` + rows.map(i=>{ const parts=(i.components||[]).length;
@@ -719,7 +858,7 @@ function drawGraph(){
     const foot = n.path!=="r" && n.partCount
       ? `<div class="n-foot"><button data-toggle="${n.path}">${n.collapsed?`▸ Show ${n.partCount} part${n.partCount===1?"":"s"}`:"▾ Hide parts"}</button><button data-open="${n.item}" title="Open ${esc(it.name)}'s own build graph">Open ↗</button></div>`
       : n.path!=="r" ? `<div class="n-foot"><button data-open="${n.item}" title="Open ${esc(it.name)}'s own build graph">Open ↗</button></div>` : "";
-    const html=`<span class="port in"></span>${n.path!=="r"?`<span class="port out"></span>`:""}
+    const html=`<span class="port in" data-port="in" title="Drag to add a part to ${esc(it.name)}"></span><span class="port out" data-port="out" title="Drag to use ${esc(it.name)} in another item"></span>
       <div class="n-head">${tile(it,44,32,15)}<div style="min-width:0"><div class="n-name">${esc(it.name)}</div>
       <div class="n-sub"><span class="tier-tag">${TIER_LABEL[it.tier]||""}</span><span class="gold">${fmt(num(it.cost))}</span>${effPill(efficiency(it))}</div>${comb!==null?`<div class="n-sub"><small>combine ${fmt(comb)}</small></div>`:""}</div></div>
       ${stats.length?`<ul>${stats.map(([k,v])=>{const s=STAT[k];return `<li><b>+${esc(v)}${s.pct?"%":""}</b> ${s.label}</li>`}).join("")}</ul>`:""}
@@ -760,6 +899,13 @@ function drawEdges(){
     const rel=relatedPaths(); const dim=rel&&!(rel.has(n.path)&&rel.has(n.parent));
     out+=`<path class="e${S.selPath===n.path?" sel":""}${dim?" dim":""}" d="M${x1},${y1} C${x1},${y1-dy} ${x2},${y2+dy} ${x2},${y2}"/>`;
   }
+  if(portDrag && portDrag.to){
+    const p=pos[portDrag.path]; if(p){
+      const x1=p.x+NODE_W/2, y1=portDrag.kind==="in"?p.y+p.h:p.y, x2=portDrag.to.x, y2=portDrag.to.y;
+      const dy=Math.max(30,Math.abs(y2-y1)*.5)*(portDrag.kind==="in"?1:-1);
+      out+=`<path class="temp" d="M${x1},${y1} C${x1},${y1+dy} ${x2},${y2-dy} ${x2},${y2}"/>`;
+    }
+  }
   $("#edges").innerHTML=out;
 }
 
@@ -796,12 +942,10 @@ function drawInspector(){
     <label class="lbl">Name<input class="field" id="f-name" value="${esc(it.name)}" ${ro}></label>
     <label class="lbl">Internal name<div class="keyfield"><span>${esc(S.config.prefix)}</span><input id="f-key" value="${esc(it.key||slug(it.name))}" spellcheck="false" ${ro}></div></label>
     <div class="lbl">Tier<div class="seg">${TIERS.map(([t,l])=>`<button class="tier-${t} ${it.tier===t?"on":""}" data-tier="${t}" ${ro}>${l}</button>`).join("")}</div></div>
-    <div class="row2">
-      <label class="lbl">Total cost<input class="field" id="f-cost" type="number" min="0" step="5" value="${num(it.cost)}" ${ro}></label>
-      <label class="lbl">Shop category<input class="field" id="f-cat" list="cats" value="${esc(it.category)}" placeholder="e.g. Fighter" ${ro}></label>
-    </div>
-    <datalist id="cats">${[...new Set(allItems().map(x=>x.category).filter(Boolean).concat(["Starter","Fighter","Mage","Tank","Support","Boots","Consumable"]))].map(c=>`<option value="${esc(c)}">`).join("")}</datalist>
+    <label class="lbl">Total cost<input class="field" id="f-cost" type="number" min="0" step="5" value="${num(it.cost)}" ${ro}></label>
     <div class="costline" id="d-cost"></div>
+    <div><div class="lbl">Shop categories${canEdit()?`<button class="catbtn" id="f-catbtn" aria-haspopup="dialog" aria-expanded="${catMenu&&catMenu.itemId===it.id?"true":"false"}">${catChips(it)}<span class="caret">▾</span></button>`:`<div class="catbtn ro">${catChips(it)}</div>`}</div>
+    </div>
   </div>
   ${S.open!==it.id || (S.selPath&&S.selPath!=="r")?`<div class="sec">
     <div class="btnrow">${S.open!==it.id?`<button class="btn sm" data-act="open">Open its build graph ↗</button>`:""}${S.selPath&&S.selPath!=="r"&&canEdit()?`<button class="btn sm danger" data-act="rmpart">Remove from ${esc((item(itemAtPath(parentPath(S.selPath)))||{}).name||"recipe")}</button>`:""}</div>
@@ -874,7 +1018,6 @@ insp.addEventListener("input", e=>{
   if(t.id==="f-name"){ const p={name:t.value}; if(!it.keyEdited) p.key=uniqueKeyFor(id,t.value); patch(id,p); }
   else if(t.id==="f-key"){ patch(id,{key:slug(t.value), keyEdited:true}); }
   else if(t.id==="f-cost"){ patch(id,{cost:num(t.value)}); }
-  else if(t.id==="f-cat"){ patch(id,{category:t.value}); }
   else if(t.dataset.stat){ patch(id,{stats:Object.assign({},it.stats,{[t.dataset.stat]:t.value===""?"":num(t.value)})}); }
   else if(t.id==="f-pname"||t.id==="f-pdesc"){ patch(id,{passive:{name:$("#f-pname").value, desc:$("#f-pdesc").value}}); }
   else if(["f-aname","f-adesc","f-acd","f-amana","f-arange"].includes(t.id)){
@@ -901,6 +1044,7 @@ insp.addEventListener("click", e=>{
   const it = S.selItem && item(S.selItem);
   if(b.dataset.pick){ openGraph(b.dataset.pick); return; }
   if(b.dataset.act==="open"){ if(it) openGraph(it.id); return; }
+  if(b.id==="f-catbtn"){ if(catMenu&&catMenu.itemId===it.id) closeCatMenu(); else openCatMenu(it.id); return; }
   if(b.dataset.act==="gold"){ openGold(); return; }
   if(!it || !canEdit()) return;
   const id = it.id;
@@ -984,13 +1128,94 @@ async function createAndOpen(){
 
 // ---------- canvas interaction ----------
 const stage=$("#stage"), world=$("#world");
-let drag=null;
+let drag=null, portDrag=null;
+function toWorld(cx,cy){ const r=stage.getBoundingClientRect(); return {x:(cx-r.left-S.view.x)/S.view.z, y:(cy-r.top-S.view.y)/S.view.z}; }
+
+// ---------- socket menu: search and pick an item to link ----------
+// kind "in"  = pick a part for the host item;  kind "out" = pick an item the host becomes a part of
+let pm=null;  // {host, kind, path, x, y, q, sel}
+function partCandidates(){
+  const host=pm.host, q=pm.q.trim().toLowerCase();
+  const order={component:0,advanced:1,legendary:2,mythic:3};
+  return allItems().filter(it=> pm.kind==="in" ? !wouldCycle(it.id,host) : !wouldCycle(host,it.id))
+    .filter(it=>!q || it.name.toLowerCase().includes(q) || catsOf(it).some(c=>c.toLowerCase().includes(q)) || (TIER_LABEL[it.tier]||"").toLowerCase()===q)
+    .sort((a,b)=>{ const sa=q&&a.name.toLowerCase().startsWith(q)?0:1, sb=q&&b.name.toLowerCase().startsWith(q)?0:1;
+      return sa-sb || (pm.kind==="in"?order[a.tier]-order[b.tier]:order[b.tier]-order[a.tier]) || num(a.cost)-num(b.cost) || a.name.localeCompare(b.name); });
+}
+function openPartMenu(o){ pm=Object.assign({q:"",sel:0},o); drawPartMenu(true); }
+function closePartMenu(){ pm=null; $("#partmenu")?.remove(); }
+function drawPartMenu(first){
+  if(!pm) return;
+  const host=item(pm.host); if(!host||!canEdit()){ closePartMenu(); return; }
+  let el=$("#partmenu");
+  if(!el){ el=document.createElement("div"); el.id="partmenu"; el.className="partmenu"; el.setAttribute("role","dialog"); document.body.appendChild(el); wirePartMenu(el);
+    el.innerHTML=`<div class="pm-h"></div><input class="field" id="pm-q" placeholder="Search items" autocomplete="off" spellcheck="false" role="combobox" aria-controls="pm-list" aria-expanded="true"><div class="pm-list" id="pm-list" role="listbox"></div><p class="pm-foot">↑ ↓ to choose · Enter to add · Esc to close</p>`; }
+  el.setAttribute("aria-label", pm.kind==="in"?`Add a part to ${host.name}`:`Use ${host.name} in another item`);
+  el.querySelector(".pm-h").innerHTML = pm.kind==="in"
+    ? `<span class="muted">Add a part to</span> <b>${esc(host.name)}</b>`
+    : `<span class="muted">Use</span> <b>${esc(host.name)}</b> <span class="muted">in…</span>`;
+  const list=partCandidates(), q=pm.q.trim();
+  const exact=list.some(it=>it.name.toLowerCase()===q.toLowerCase());
+  const rows=list.map(it=>{ const n=pm.kind==="in"?recipeCount(pm.host,it.id):recipeCount(it.id,pm.host);
+    return `<div class="pm-row tier-${it.tier}" role="option" data-pick="${it.id}">${tile(it,28,20,10)}<span class="nm">${esc(it.name)}${n?`<small>already ×${n}</small>`:""}</span><span class="tier-tag">${TIER_LABEL[it.tier]}</span><span class="gold">${fmt(num(it.cost))}</span></div>`; });
+  if(q && !exact) rows.push(`<div class="pm-row pm-new" role="option" data-new="1"><span class="plus">+</span><span class="nm">Create “${esc(q)}”<small>${pm.kind==="in"?"as a new part":"as a new item that uses it"}</small></span></div>`);
+  pm.sel=Math.max(0,Math.min(pm.sel,rows.length-1));
+  const lst=el.querySelector(".pm-list");
+  lst.innerHTML = rows.length ? rows.map((r,i)=>r.replace('role="option"',`role="option" id="pm-o${i}" aria-selected="${i===pm.sel}"${i===pm.sel?' data-on="1"':""}`)).join("")
+    : `<p class="note" style="margin:8px">No items fit here${q?` for “${esc(q)}”`:""}.</p>`;
+  el.querySelector("#pm-q").setAttribute("aria-activedescendant", rows.length?`pm-o${pm.sel}`:"");
+  lst.querySelector('[data-on="1"]')?.scrollIntoView({block:"nearest"});
+  if(first){
+    const w=Math.min(300, innerWidth-24), h=Math.min(360, innerHeight-24);
+    let x=pm.x-w/2, y = pm.kind==="in" ? pm.y+12 : pm.y-12-h;
+    if(y<12) y=pm.y+12; if(y+h>innerHeight-12) y=Math.max(12, pm.y-12-h);
+    x=Math.min(Math.max(12,x), innerWidth-w-12);
+    el.style.left=x+"px"; el.style.top=y+"px"; el.style.width=w+"px"; el.style.maxHeight=h+"px";
+    setTimeout(()=>el.querySelector("#pm-q")?.focus(),20);
+  }
+}
+async function pickPart(id, isNew){
+  if(!pm) return;
+  const {host, kind, path}=pm; const q=pm.q.trim();
+  if(isNew){
+    const order=["component","advanced","legendary","mythic"], ht=item(host).tier, i=order.indexOf(ht);
+    const tier = kind==="in" ? order[Math.max(0,i-1)] : order[Math.min(order.length-1,i+1)];
+    id = await createItem({name:q, key:uniqueKeyFor(null,q), tier});
+    if(!id) return;
+  }
+  closePartMenu();
+  const ok = kind==="in" ? addPart(id, host) : addPart(host, id);
+  if(!ok) return;
+  if(kind==="in"){ setCollapsed(path,false); const n=(item(host).components||[]).length-1; selectPath(path==="r"?"r."+n:path+"."+n); }
+  else if(path==="r" || !S.open) openGraph(id);
+  else { const it=item(id); toast(`${item(host).name} is now part of ${it.name}`,"Open",()=>openGraph(id)); }
+}
+function wirePartMenu(el){
+  el.addEventListener("input",e=>{ if(e.target.id==="pm-q"){ pm.q=e.target.value; pm.sel=0; drawPartMenu(); } });
+  el.addEventListener("keydown",e=>{
+    if(!pm) return;
+    const opts=[...el.querySelectorAll(".pm-row")];
+    if(e.key==="ArrowDown"){ e.preventDefault(); pm.sel=Math.min(opts.length-1,pm.sel+1); drawPartMenu(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); pm.sel=Math.max(0,pm.sel-1); drawPartMenu(); }
+    else if(e.key==="Enter"){ e.preventDefault(); const o=opts[pm.sel]; if(o) pickPart(o.dataset.pick, !!o.dataset.new); }
+    else if(e.key==="Escape"){ e.preventDefault(); e.stopPropagation(); closePartMenu(); }
+  });
+  el.addEventListener("pointermove",e=>{ const o=e.target.closest(".pm-row"); if(!o||!pm) return; const i=[...el.querySelectorAll(".pm-row")].indexOf(o); if(i!==pm.sel){ pm.sel=i; el.querySelectorAll(".pm-row").forEach((r,j)=>{ r.toggleAttribute("data-on",j===i); r.setAttribute("aria-selected",j===i); }); } });
+  el.addEventListener("click",e=>{ const o=e.target.closest(".pm-row"); if(o) pickPart(o.dataset.pick, !!o.dataset.new); });
+}
+document.addEventListener("pointerdown",e=>{ if(pm && !e.target.closest("#partmenu")) closePartMenu(); },true);
 function applyView(){ world.style.transform=`translate(${S.view.x}px,${S.view.y}px) scale(${S.view.z})`; stage.style.backgroundPosition=`${S.view.x}px ${S.view.y}px`; stage.style.backgroundSize=`${24*S.view.z}px ${24*S.view.z}px`; }
 function cardAt(cx,cy){ for(const el of document.elementsFromPoint(cx,cy)){ const n=el.closest&&el.closest(".node"); if(n) return n.dataset.path; } return null; }
 
 stage.addEventListener("pointerdown", e=>{
   if(e.button!==0 && e.pointerType==="mouse") return;
   if(e.target.closest(".zoom,.empty,.crumbs")) return;
+  const port=e.target.closest(".port");
+  if(port && canEdit()){
+    e.preventDefault(); closePartMenu();
+    portDrag={path:port.closest(".node").dataset.path, kind:port.dataset.port, sx:e.clientX, sy:e.clientY, moved:false, to:null};
+    port.classList.add("live"); stage.setPointerCapture(e.pointerId); return;
+  }
   const card=e.target.closest(".node");
   const onButton=e.target.closest("button");
   const path=card&&card.dataset.path;
@@ -999,6 +1224,13 @@ stage.addEventListener("pointerdown", e=>{
   stage.setPointerCapture(e.pointerId);
 });
 stage.addEventListener("pointermove", e=>{
+  if(portDrag){
+    if(Math.abs(e.clientX-portDrag.sx)+Math.abs(e.clientY-portDrag.sy)>4) portDrag.moved=true;
+    portDrag.to=toWorld(e.clientX,e.clientY);
+    document.querySelectorAll(".node.drop-target").forEach(n=>n.classList.remove("drop-target"));
+    const over=cardAt(e.clientX,e.clientY); if(over && over!==portDrag.path) document.querySelector(`.node[data-path="${over}"]`)?.classList.add("drop-target");
+    drawEdges(); return;
+  }
   if(!drag) return;
   if(Math.abs(e.clientX-drag.sx)+Math.abs(e.clientY-drag.sy)>4){ drag.moved=true; stage.classList.add("panning"); }
   if(!drag.moved) return;
@@ -1007,7 +1239,27 @@ stage.addEventListener("pointermove", e=>{
     layout($("#nodes")); drawEdges();
   } else { S.view.x=drag.vx+e.clientX-drag.sx; S.view.y=drag.vy+e.clientY-drag.sy; applyView(); }
 });
-stage.addEventListener("pointerup", ()=>{
+stage.addEventListener("pointerup", e=>{
+  if(portDrag){
+    const pd=portDrag; portDrag=null;
+    document.querySelectorAll(".port.live,.node.drop-target").forEach(n=>n.classList.remove("live","drop-target"));
+    const host=itemAtPath(pd.path); drawEdges();
+    if(!host) return;
+    const over=pd.moved ? cardAt(e.clientX,e.clientY) : null;
+    if(over && over!==pd.path){
+      // dropped on another card: link the two directly
+      const other=itemAtPath(over);
+      const ok = pd.kind==="in" ? addPart(other, host) : addPart(host, other);
+      if(ok){ const target = pd.kind==="in" ? pd.path : over; setCollapsed(target,false); selectPath(target); }
+      return;
+    }
+    const p=pos[pd.path];
+    // a plain click opens the menu beside the socket; a drag opens it where you let go
+    let cx=e.clientX, cy=e.clientY;
+    if(!pd.moved && p){ const r=stage.getBoundingClientRect(); cx=r.left+S.view.x+(p.x+NODE_W/2)*S.view.z; cy=r.top+S.view.y+(pd.kind==="in"?p.y+p.h:p.y)*S.view.z; }
+    openPartMenu({host, kind:pd.kind, path:pd.path, x:cx, y:cy});
+    return;
+  }
   stage.classList.remove("panning");
   const d=drag; drag=null; if(!d) return;
   if(d.moved && d.move && liveNudge){ const n=liveNudge; liveNudge=null; commitNudge(n.path,n.dx,n.dy); render(); return; }
@@ -1018,7 +1270,7 @@ stage.addEventListener("pointerup", ()=>{
   if(op){ openGraph(op.dataset.open); return; }
   if(d.path) selectPath(d.path); else if(S.open) selectPath("r");
 });
-stage.addEventListener("pointercancel", ()=>{ drag=null; liveNudge=null; stage.classList.remove("panning"); render(); });
+stage.addEventListener("pointercancel", ()=>{ drag=null; liveNudge=null; portDrag=null; document.querySelectorAll(".port.live,.node.drop-target").forEach(n=>n.classList.remove("live","drop-target")); stage.classList.remove("panning"); render(); });
 stage.addEventListener("dblclick", e=>{ const c=e.target.closest(".node"); if(c && c.dataset.path!=="r"){ const id=itemAtPath(c.dataset.path); if(id) openGraph(id); } });
 stage.addEventListener("wheel", e=>{
   e.preventDefault();
@@ -1087,7 +1339,7 @@ document.addEventListener("pointercancel", ()=>{ if(pal&&pal.ghost){ pal.ghost.r
 
 // ---------- examples ----------
 async function loadExample(){
-  const mk=(name,tier,cost,stats,extra={})=>createItem(Object.assign({name,key:uniqueKeyFor(null,name),keyEdited:false,tier,cost,stats,example:true,category:extra.category||""},extra));
+  const mk=(name,tier,cost,stats,extra={})=>createItem(Object.assign({name,key:uniqueKeyFor(null,name),keyEdited:false,tier,cost,stats,example:true,category:extra.category||"",categories:extra.category?[extra.category]:[]},extra));
   const dagger=await mk("Leyline Dagger","component",350,{damage:10},{category:"Fighter"});
   const shard=await mk("Mana Shard","component",435,{affinity:20},{category:"Mage"});
   const shell=await mk("Crystal Shell","component",300,{armor:8},{category:"Tank"});
@@ -1151,7 +1403,7 @@ function describeChanges(oldArr, newArr){
     if(!same(a.passive,b.passive)) lines.push(b.passive&&b.passive.name?(a.passive&&a.passive.name?"passive reworked":`new passive: ${b.passive.name}`):"passive removed");
     if(!same(a.active,b.active)) lines.push(b.active&&b.active.on?(a.active&&a.active.on?"active reworked":`new active: ${b.active.name||"unnamed"}`):"active removed");
     if(!same(a.values,b.values)) lines.push("effect values tuned");
-    if((a.category||"")!==(b.category||"")) lines.push(`shop category ${a.category||"none"} → ${b.category||"none"}`);
+    if(catsOf(a).join(", ")!==catsOf(b).join(", ")) lines.push(`shop categories ${catsOf(a).join(", ")||"none"} → ${catsOf(b).join(", ")||"none"}`);
     if((a.iconId||"")!==(b.iconId||"")) lines.push("new icon");
     if((a.lore||"")!==(b.lore||"")) lines.push("lore updated");
     if(lines.length) changed.push({name:b.name,lines});
@@ -1551,7 +1803,7 @@ function buildKV(){
     if(a){ L.push(`\t\t"AbilityCooldown"\t\t"${num(a.cooldown)}"`,`\t\t"AbilityManaCost"\t\t"${num(a.mana)}"`); if(num(a.range)) L.push(`\t\t"AbilityCastRange"\t\t"${num(a.range)}"`); }
     L.push(`\t\t"ItemCost"\t\t\t"${num(it.cost)}"`);
     L.push(`\t\t"ItemQuality"\t\t\t"${QUALITY[it.tier]||"component"}"`);
-    L.push(`\t\t"ItemShopTags"\t\t\t${q(slug(it.category||"misc"))}`);
+    L.push(`\t\t"ItemShopTags"\t\t\t${q((catsOf(it).length?catsOf(it):["misc"]).map(slug).join(";"))}`);
     L.push(`\t\t"ItemPurchasable"\t\t"1"`,`\t\t"ItemSellable"\t\t\t"1"`,`\t\t"ItemDroppable"\t\t\t"1"`);
     const vals=[]; Object.entries(it.stats||{}).forEach(([k,v])=>{ if(STAT[k]&&v!=="") vals.push([STAT[k].kv,num(v)]); });
     (it.values||[]).forEach(v=>{ if(v.key) vals.push([v.key,v.value]); });
