@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 48,
- "publishedAt": 1793551970468,
+ "version": 49,
+ "publishedAt": 1793552263846,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -761,6 +761,45 @@
    ]
   },
   {
+   "id": "6b9ea36c207945c0",
+   "name": "Mana-Enchanted Sword",
+   "key": "manaenchanted_sword",
+   "keyEdited": false,
+   "tier": "legendary",
+   "category": "",
+   "categories": [],
+   "cost": 2800,
+   "iconId": "",
+   "stats": {
+    "attack_speed": 30,
+    "damage": 30,
+    "affinity": 50
+   },
+   "components": [
+    "b06da36950494bea",
+    "b7d7fa84fe9741b9",
+    "b7d7fa84fe9741b9"
+   ],
+   "passive": {
+    "name": "Mana Hungry",
+    "desc": "Steal 10 mana on attack and deal that much damage as pure damage "
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793552063220,
+   "updatedAt": 1793552063220,
+   "dotaId": 8080
+  },
+  {
    "id": "b06da36950494bea",
    "name": "Mana-Touched Stick",
    "key": "manatouched_stick",
@@ -1233,6 +1272,19 @@
   }
  ],
  "releases": [
+  {
+   "version": 49,
+   "publishedAt": 1793552263846,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Mana-Enchanted Sword"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 48,
    "publishedAt": 1793551970468,
