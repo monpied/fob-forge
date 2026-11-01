@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 31,
- "publishedAt": 1793508501779,
+ "version": 32,
+ "publishedAt": 1793508555631,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -182,8 +182,8 @@
   },
   {
    "id": "adf673e2d5b24922",
-   "name": "Brain Amalgan",
-   "key": "brain_amalgan",
+   "name": "Brain Amalgam",
+   "key": "brain_amalgam",
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
@@ -199,7 +199,7 @@
    ],
    "passive": {
     "name": "Brain Power",
-    "desc": "Gain 1 intellect on kill (max 10)"
+    "desc": "Gain 1 intellect on Hero kill (max 10)"
    },
    "active": {
     "on": false,
@@ -765,7 +765,7 @@
    ],
    "passive": {
     "name": "Brain Power",
-    "desc": "Gain 2 intellect on kill (max 30)"
+    "desc": "Gain 2 intellect on Hero kill (max 30) (Keep the stack from Brain Amalgam"
    },
    "active": {
     "on": false,
@@ -955,6 +955,32 @@
   }
  ],
  "releases": [
+  {
+   "version": 32,
+   "publishedAt": 1793508555631,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Brain Amalgam",
+      "lines": [
+       "renamed from Brain Amalgan",
+       "passive reworked"
+      ]
+     },
+     {
+      "name": "Omniscient Brain ",
+      "lines": [
+       "recipe: Brain Amalgan, Orb of Darkness → Brain Amalgam, Orb of Darkness",
+       "passive reworked"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 31,
    "publishedAt": 1793508501779,
