@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 45,
- "publishedAt": 1793520220115,
+ "version": 46,
+ "publishedAt": 1793520473526,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -96,7 +96,7 @@
    ],
    "passive": {
     "name": "Smash",
-    "desc": "Attack create waves that deal 20% of your damage to close enemies"
+    "desc": "Attacks create waves that deal 20% of your damage to close enemies"
    },
    "active": {
     "on": false,
@@ -112,6 +112,43 @@
    "createdAt": 1793502101728,
    "updatedAt": 1793502101728,
    "dotaId": 8030
+  },
+  {
+   "id": "84d0619d9fe24009",
+   "name": "Big Ol'Trusty Mace",
+   "key": "big_oltrusty_mace",
+   "keyEdited": false,
+   "tier": "legendary",
+   "category": "",
+   "categories": [],
+   "cost": 3000,
+   "iconId": "",
+   "stats": {
+    "str": 50,
+    "damage": 10
+   },
+   "components": [
+    "def981e4c2704334",
+    "def981e4c2704334"
+   ],
+   "passive": {
+    "name": "Smash Harder",
+    "desc": "Attacks creates waves that deal 35% of your damage to close enemies"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793520297553,
+   "updatedAt": 1793520297553,
+   "dotaId": 8072
   },
   {
    "id": "c8e536b536134258",
@@ -883,10 +920,10 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "Mage",
-   "cost": 850,
+   "cost": 1025,
    "iconId": "",
    "stats": {
-    "affinity": 45
+    "affinity": 50
    },
    "components": [
     "233c58f1c9f64feb",
@@ -1086,6 +1123,33 @@
   }
  ],
  "releases": [
+  {
+   "version": 46,
+   "publishedAt": 1793520473526,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Big Ol'Trusty Mace"
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Big Ol'Mace",
+      "lines": [
+       "passive reworked"
+      ]
+     },
+     {
+      "name": "Reforged Crystal",
+      "lines": [
+       "cost 850 → 1,025",
+       "Affinity 45 → 50"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 45,
    "publishedAt": 1793520220115,
