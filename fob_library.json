@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 40,
- "publishedAt": 1793518597650,
+ "version": 41,
+ "publishedAt": 1793519365790,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -322,7 +322,7 @@
    "name": "Cloak of Time",
    "key": "cloak_of_time",
    "keyEdited": false,
-   "tier": "legendary",
+   "tier": "mythic",
    "category": "",
    "cost": 10000,
    "iconId": "",
@@ -390,7 +390,7 @@
    "name": "Despair",
    "key": "despair",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "",
    "cost": 2000,
    "iconId": "",
@@ -495,7 +495,7 @@
    "name": "Heart of a Legend",
    "key": "heart_of_a_legend",
    "keyEdited": false,
-   "tier": "legendary",
+   "tier": "mythic",
    "category": "Tank",
    "cost": 7100,
    "iconId": "",
@@ -534,7 +534,7 @@
    "name": "Hope",
    "key": "hope",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "",
    "cost": 2000,
    "iconId": "",
@@ -570,7 +570,7 @@
    "name": "Hope&despair",
    "key": "hopedespair",
    "keyEdited": false,
-   "tier": "legendary",
+   "tier": "mythic",
    "category": "Fighter",
    "cost": 6000,
    "iconId": "",
@@ -682,7 +682,7 @@
    "name": "NightSword",
    "key": "nightsword",
    "keyEdited": false,
-   "tier": "legendary",
+   "tier": "mythic",
    "category": "Mage",
    "cost": 7600,
    "iconId": "",
@@ -754,7 +754,7 @@
    "name": "Omniscient Brain ",
    "key": "omniscient_brain",
    "keyEdited": false,
-   "tier": "legendary",
+   "tier": "mythic",
    "category": "Mage",
    "cost": 5500,
    "iconId": "",
@@ -870,7 +870,9 @@
    "category": "Mage",
    "cost": 850,
    "iconId": "",
-   "stats": {},
+   "stats": {
+    "affinity": 45
+   },
    "components": [
     "233c58f1c9f64feb",
     "233c58f1c9f64feb"
@@ -1031,6 +1033,66 @@
   }
  ],
  "releases": [
+  {
+   "version": 41,
+   "publishedAt": 1793519365790,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Cloak of Time",
+      "lines": [
+       "T3 → T4"
+      ]
+     },
+     {
+      "name": "Despair",
+      "lines": [
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Heart of a Legend",
+      "lines": [
+       "T3 → T4"
+      ]
+     },
+     {
+      "name": "Hope",
+      "lines": [
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Hope&despair",
+      "lines": [
+       "T3 → T4"
+      ]
+     },
+     {
+      "name": "NightSword",
+      "lines": [
+       "T3 → T4"
+      ]
+     },
+     {
+      "name": "Omniscient Brain ",
+      "lines": [
+       "T3 → T4"
+      ]
+     },
+     {
+      "name": "Reforged Crystal",
+      "lines": [
+       "now gives +45 Affinity"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 40,
    "publishedAt": 1793518597650,
