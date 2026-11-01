@@ -347,7 +347,7 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.5;backg
           </div>
         </div>
       </div>
-      <div class="hint" id="hint">Drag a ● socket to add a part · drag library items onto cards · drag cards to move them · double-click to open · Ctrl+Z undo, Ctrl+X redo</div>
+      <div class="hint" id="hint">Right-click or drag a ● socket to add a part · drag library items onto cards · drag cards to move them · double-click to open · Ctrl+Z undo, Ctrl+X redo</div>
       <div class="zoom">
         <button class="btn icon-btn" id="zOut" aria-label="Zoom out">−</button>
         <button class="btn icon-btn" id="zFit" aria-label="Fit all items">⤢</button>
@@ -766,10 +766,15 @@ let raf=0, needFit=false, tree=[];
 // Cards you drag are nudged away from the automatic shop layout. The nudges are saved per graph in this
 // browser; moving a card moves the parts under it too.
 let nudges={}; try{ nudges=JSON.parse(localStorage.getItem("fob-forge-layout")||"{}"); }catch(e){}
-let liveNudge=null;   // {path,dx,dy} while a card is being dragged
+let liveNudge=null, pendingPlace=null;   // {path,dx,dy} while a card is being dragged
 const graphNudges = () => nudges[S.open]||{};
 function saveNudges(){ try{ localStorage.setItem("fob-forge-layout", JSON.stringify(nudges)); }catch(e){} }
 function setGraphNudges(root, v){ if(v&&Object.keys(v).length) nudges[root]=v; else delete nudges[root]; saveNudges(); }
+function pruneNudges(){
+  const g=graphNudges(); let changed=false;
+  for(const k of Object.keys(g)) if(!itemAtPath(k)){ delete g[k]; changed=true; }
+  if(changed) setGraphNudges(S.open,g);
+}
 function nudgeFor(path){
   const g=graphNudges(); let x=0,y=0; const segs=path.split(".");
   for(let i=1;i<=segs.length;i++){ const p=segs.slice(0,i).join("."); const o=g[p]; if(o){ x+=o.x; y+=o.y; }
@@ -871,6 +876,11 @@ function drawGraph(){
   }
   host.querySelectorAll(".node").forEach(el=>{ if(!keep.has(el.dataset.path)){ delete nodeCache[el.dataset.path]; el.remove(); } });
   layout(host);
+  if(pendingPlace && pos[pendingPlace.path]){
+    const pp=pendingPlace; pendingPlace=null; const p=pos[pp.path];
+    const g=Object.assign({},graphNudges()), o=g[pp.path]||{x:0,y:0};
+    g[pp.path]={x:Math.round(o.x+pp.x-p.x), y:Math.round(o.y+pp.y-p.y)}; setGraphNudges(S.open,g); layout(host);
+  }
   drawEdges();
   if(needFit && tree.length){ needFit=false; fit(); }
 }
@@ -881,6 +891,7 @@ function relatedPaths(){
 }
 // shop layout: leaves get one column each, every item centred over its parts, rows sized to the tallest card
 function layout(host){
+  if(S.open) pruneNudges();
   const H={}; host.querySelectorAll(".node").forEach(el=>H[el.dataset.path]=el.offsetHeight);
   const byPath=Object.fromEntries(tree.map(n=>[n.path,n]));
   let cursor=0; const col={};
@@ -1140,28 +1151,29 @@ let pm=null;  // {host, kind, path, x, y, q, sel}
 function partCandidates(){
   const host=pm.host, q=pm.q.trim().toLowerCase();
   const order={component:0,advanced:1,legendary:2,mythic:3};
-  return allItems().filter(it=> pm.kind==="in" ? !wouldCycle(it.id,host) : !wouldCycle(host,it.id))
+  return allItems().filter(it=> pm.kind==="open" ? true : pm.kind==="in" ? !wouldCycle(it.id,host) : !wouldCycle(host,it.id))
     .filter(it=>!q || it.name.toLowerCase().includes(q) || catsOf(it).some(c=>c.toLowerCase().includes(q)) || (TIER_LABEL[it.tier]||"").toLowerCase()===q)
     .sort((a,b)=>{ const sa=q&&a.name.toLowerCase().startsWith(q)?0:1, sb=q&&b.name.toLowerCase().startsWith(q)?0:1;
-      return sa-sb || (pm.kind==="in"?order[a.tier]-order[b.tier]:order[b.tier]-order[a.tier]) || num(a.cost)-num(b.cost) || a.name.localeCompare(b.name); });
+      return sa-sb || (pm.kind==="out"?order[b.tier]-order[a.tier]:order[a.tier]-order[b.tier]) || num(a.cost)-num(b.cost) || a.name.localeCompare(b.name); });
 }
 function openPartMenu(o){ pm=Object.assign({q:"",sel:0},o); drawPartMenu(true); }
 function closePartMenu(){ pm=null; $("#partmenu")?.remove(); }
 function drawPartMenu(first){
   if(!pm) return;
-  const host=item(pm.host); if(!host||!canEdit()){ closePartMenu(); return; }
+  const host=pm.kind==="open" ? {name:""} : item(pm.host); if(!host||!canEdit()){ closePartMenu(); return; }
   let el=$("#partmenu");
   if(!el){ el=document.createElement("div"); el.id="partmenu"; el.className="partmenu"; el.setAttribute("role","dialog"); document.body.appendChild(el); wirePartMenu(el);
     el.innerHTML=`<div class="pm-h"></div><input class="field" id="pm-q" placeholder="Search items" autocomplete="off" spellcheck="false" role="combobox" aria-controls="pm-list" aria-expanded="true"><div class="pm-list" id="pm-list" role="listbox"></div><p class="pm-foot">↑ ↓ to choose · Enter to add · Esc to close</p>`; }
-  el.setAttribute("aria-label", pm.kind==="in"?`Add a part to ${host.name}`:`Use ${host.name} in another item`);
-  el.querySelector(".pm-h").innerHTML = pm.kind==="in"
+  el.setAttribute("aria-label", pm.kind==="open"?"Open or create an item":pm.kind==="in"?`Add a part to ${host.name}`:`Use ${host.name} in another item`);
+  el.querySelector(".pm-foot").textContent = pm.kind==="open" ? "↑ ↓ to choose · Enter to open · Esc to close" : "↑ ↓ to choose · Enter to add · Esc to close";
+  el.querySelector(".pm-h").innerHTML = pm.kind==="open" ? `<span class="muted">Open or create an item</span>` : pm.kind==="in"
     ? `<span class="muted">Add a part to</span> <b>${esc(host.name)}</b>`
     : `<span class="muted">Use</span> <b>${esc(host.name)}</b> <span class="muted">in…</span>`;
   const list=partCandidates(), q=pm.q.trim();
   const exact=list.some(it=>it.name.toLowerCase()===q.toLowerCase());
-  const rows=list.map(it=>{ const n=pm.kind==="in"?recipeCount(pm.host,it.id):recipeCount(it.id,pm.host);
+  const rows=list.map(it=>{ const n=pm.kind==="open"?0:pm.kind==="in"?recipeCount(pm.host,it.id):recipeCount(it.id,pm.host);
     return `<div class="pm-row tier-${it.tier}" role="option" data-pick="${it.id}">${tile(it,28,20,10)}<span class="nm">${esc(it.name)}${n?`<small>already ×${n}</small>`:""}</span><span class="tier-tag">${TIER_LABEL[it.tier]}</span><span class="gold">${fmt(num(it.cost))}</span></div>`; });
-  if(q && !exact) rows.push(`<div class="pm-row pm-new" role="option" data-new="1"><span class="plus">+</span><span class="nm">Create “${esc(q)}”<small>${pm.kind==="in"?"as a new part":"as a new item that uses it"}</small></span></div>`);
+  if(q && !exact) rows.push(`<div class="pm-row pm-new" role="option" data-new="1"><span class="plus">+</span><span class="nm">Create “${esc(q)}”<small>${pm.kind==="open"?"as a new item":pm.kind==="in"?"as a new part":"as a new item that uses it"}</small></span></div>`);
   pm.sel=Math.max(0,Math.min(pm.sel,rows.length-1));
   const lst=el.querySelector(".pm-list");
   lst.innerHTML = rows.length ? rows.map((r,i)=>r.replace('role="option"',`role="option" id="pm-o${i}" aria-selected="${i===pm.sel}"${i===pm.sel?' data-on="1"':""}`)).join("")
@@ -1170,7 +1182,8 @@ function drawPartMenu(first){
   lst.querySelector('[data-on="1"]')?.scrollIntoView({block:"nearest"});
   if(first){
     const w=Math.min(300, innerWidth-24), h=Math.min(360, innerHeight-24);
-    let x=pm.x-w/2, y = pm.kind==="in" ? pm.y+12 : pm.y-12-h;
+    let x=pm.x-w/2, y = pm.kind==="out" ? pm.y-12-h : pm.y+12;
+    if(pm.ctx){ x=pm.x+2; y=pm.y+2; if(x+w>innerWidth-12) x=pm.x-w-2; }
     if(y<12) y=pm.y+12; if(y+h>innerHeight-12) y=Math.max(12, pm.y-12-h);
     x=Math.min(Math.max(12,x), innerWidth-w-12);
     el.style.left=x+"px"; el.style.top=y+"px"; el.style.width=w+"px"; el.style.maxHeight=h+"px";
@@ -1179,7 +1192,11 @@ function drawPartMenu(first){
 }
 async function pickPart(id, isNew){
   if(!pm) return;
-  const {host, kind, path}=pm; const q=pm.q.trim();
+  const {host, kind, path, dropAt}=pm; const q=pm.q.trim();
+  if(kind==="open"){
+    if(isNew){ id=await createItem({name:q, key:uniqueKeyFor(null,q)}); if(!id) return; }
+    closePartMenu(); openGraph(id); return;
+  }
   if(isNew){
     const order=["component","advanced","legendary","mythic"], ht=item(host).tier, i=order.indexOf(ht);
     const tier = kind==="in" ? order[Math.max(0,i-1)] : order[Math.min(order.length-1,i+1)];
@@ -1189,7 +1206,9 @@ async function pickPart(id, isNew){
   closePartMenu();
   const ok = kind==="in" ? addPart(id, host) : addPart(host, id);
   if(!ok) return;
-  if(kind==="in"){ setCollapsed(path,false); const n=(item(host).components||[]).length-1; selectPath(path==="r"?"r."+n:path+"."+n); }
+  if(kind==="in"){ setCollapsed(path,false); const n=(item(host).components||[]).length-1; const np=path==="r"?"r."+n:path+"."+n;
+    if(dropAt) pendingPlace={path:np, x:dropAt.x-NODE_W/2, y:dropAt.y-20};
+    selectPath(np); }
   else if(path==="r" || !S.open) openGraph(id);
   else { const it=item(id); toast(`${item(host).name} is now part of ${it.name}`,"Open",()=>openGraph(id)); }
 }
@@ -1274,6 +1293,16 @@ stage.addEventListener("pointerup", e=>{
   if(d.path) selectPath(d.path); else if(S.open) selectPath("r");
 });
 stage.addEventListener("pointercancel", ()=>{ drag=null; liveNudge=null; portDrag=null; document.querySelectorAll(".port.live,.node.drop-target").forEach(n=>n.classList.remove("live","drop-target")); stage.classList.remove("panning"); render(); });
+stage.addEventListener("contextmenu", e=>{
+  if(!canEdit() || e.target.closest(".zoom,.crumbs,.empty .card")) return;   // viewers keep the normal browser menu
+  e.preventDefault(); closeCatMenu();
+  const card=e.target.closest(".node");
+  if(!S.open || !item(S.open)){ openPartMenu({kind:"open", x:e.clientX, y:e.clientY, ctx:true}); return; }
+  const path = card ? card.dataset.path : "r";
+  const host = itemAtPath(path); if(!host) return;
+  if(card) selectPath(path);
+  openPartMenu({host, kind:"in", path, x:e.clientX, y:e.clientY, ctx:true, dropAt: card ? null : toWorld(e.clientX,e.clientY)});
+});
 stage.addEventListener("dblclick", e=>{ const c=e.target.closest(".node"); if(c && c.dataset.path!=="r"){ const id=itemAtPath(c.dataset.path); if(id) openGraph(id); } });
 stage.addEventListener("wheel", e=>{
   e.preventDefault();
