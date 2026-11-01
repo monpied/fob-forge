@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 47,
- "publishedAt": 1793521543632,
+ "version": 48,
+ "publishedAt": 1793551970468,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -332,8 +332,8 @@
     "all_stats": 20
    },
    "components": [
-    "6054edc8bce84d11",
-    "6054edc8bce84d11"
+    "6681658337354095",
+    "6681658337354095"
    ],
    "passive": {
     "name": "",
@@ -462,6 +462,44 @@
    "updatedAt": 1793504467165,
    "iconData": "data:image/png;base64,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",
    "dotaId": 8052
+  },
+  {
+   "id": "15d20d7bcead438d",
+   "name": "Enchanted Cloak",
+   "key": "enchanted_cloak",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "Tank",
+   "categories": [
+    "Tank"
+   ],
+   "cost": 950,
+   "iconId": "",
+   "stats": {
+    "magic_resist": 22
+   },
+   "components": [
+    "1d4bfcba3dad4c9b",
+    "1d4bfcba3dad4c9b"
+   ],
+   "passive": {
+    "name": "Spell Barrier",
+    "desc": "Gains 200 barriers after being hit by a spell (30sec cd)"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793551629989,
+   "updatedAt": 1793551629989,
+   "dotaId": 8076
   },
   {
    "id": "db3b2bc3c5304cb0",
@@ -650,6 +688,42 @@
    "dotaId": 8048
   },
   {
+   "id": "6681658337354095",
+   "name": "Mana Gemstone",
+   "key": "mana_gemstone",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "",
+   "categories": [],
+   "cost": 1525,
+   "iconId": "",
+   "stats": {
+    "all_stats": 10
+   },
+   "components": [
+    "6054edc8bce84d11",
+    "6054edc8bce84d11"
+   ],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793551782137,
+   "updatedAt": 1793551782137,
+   "dotaId": 8078
+  },
+  {
    "id": "6054edc8bce84d11",
    "name": "Mana Pearl",
    "key": "mana_pearl",
@@ -727,6 +801,44 @@
     "Fighter",
     "Mage"
    ]
+  },
+  {
+   "id": "19c10af55ebc4d60",
+   "name": "Mass-Produced Armor",
+   "key": "massproduced_armor",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "Tank",
+   "categories": [
+    "Tank"
+   ],
+   "cost": 900,
+   "iconId": "",
+   "stats": {
+    "armor": 10
+   },
+   "components": [
+    "fbf0b51ab9c04856",
+    "fbf0b51ab9c04856"
+   ],
+   "passive": {
+    "name": "Better Than Nothing",
+    "desc": "Block 5 damages from attacks"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793551518761,
+   "updatedAt": 1793551518761,
+   "dotaId": 8074
   },
   {
    "id": "00f4805ca3bf4442",
@@ -889,10 +1001,8 @@
     "magic_resist": 15
    },
    "components": [
-    "1d4bfcba3dad4c9b",
-    "fbf0b51ab9c04856",
-    "fbf0b51ab9c04856",
-    "1d4bfcba3dad4c9b"
+    "19c10af55ebc4d60",
+    "15d20d7bcead438d"
    ],
    "passive": {
     "name": "Protected by Faith",
@@ -1123,6 +1233,34 @@
   }
  ],
  "releases": [
+  {
+   "version": 48,
+   "publishedAt": 1793551970468,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Enchanted Cloak",
+     "Mana Gemstone",
+     "Mass-Produced Armor"
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Charged Gemstone",
+      "lines": [
+       "recipe: Mana Pearl ×2 → Mana Gemstone ×2"
+      ]
+     },
+     {
+      "name": "Paladin Armor",
+      "lines": [
+       "recipe: Old Cloak ×2, Rusty Armor ×2 → Enchanted Cloak, Mass-Produced Armor"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 47,
    "publishedAt": 1793521543632,
