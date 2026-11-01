@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 22,
- "publishedAt": 1793505125712,
+ "version": 23,
+ "publishedAt": 1793505166312,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -38,10 +38,10 @@
    "keyEdited": false,
    "tier": "component",
    "category": "",
-   "cost": 350,
+   "cost": 500,
    "iconId": "",
    "stats": {
-    "str": 5
+    "str": 10
    },
    "components": [],
    "passive": {
@@ -70,10 +70,10 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 1100,
+   "cost": 675,
    "iconId": "",
    "stats": {
-    "str": 15
+    "str": 20
    },
    "components": [
     "daa2bdd24db04e24"
@@ -163,6 +163,70 @@
    "createdAt": 1793501563999,
    "updatedAt": 1793501563999,
    "dotaId": 8024
+  },
+  {
+   "id": "8ee0f6d6ff074b96",
+   "name": "Brown Socks",
+   "key": "brown_socks",
+   "keyEdited": false,
+   "tier": "component",
+   "category": "",
+   "cost": 500,
+   "iconId": "",
+   "stats": {
+    "agi": 10
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793503479237,
+   "updatedAt": 1793503479237,
+   "dotaId": 8054
+  },
+  {
+   "id": "b7d7fa84fe9741b9",
+   "name": "Cafi Beans",
+   "key": "cafi_beans",
+   "keyEdited": false,
+   "tier": "component",
+   "category": "",
+   "cost": 250,
+   "iconId": "",
+   "stats": {
+    "attack_speed": 10
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793504015156,
+   "updatedAt": 1793504015156,
+   "dotaId": 8056
   },
   {
    "id": "7c8096c50daf4e26",
@@ -732,6 +796,35 @@
   }
  ],
  "releases": [
+  {
+   "version": 23,
+   "publishedAt": 1793505166312,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Brown Socks",
+     "Cafi Beans"
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": " Ol'Mace",
+      "lines": [
+       "cost 350 → 500",
+       "Strength 5 → 10"
+      ]
+     },
+     {
+      "name": "Big Ol'Mace",
+      "lines": [
+       "cost 1,100 → 675",
+       "Strength 15 → 20"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 22,
    "publishedAt": 1793505125712,
