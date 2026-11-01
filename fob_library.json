@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 15,
- "publishedAt": 1793502822532,
+ "version": 16,
+ "publishedAt": 1793502943530,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -388,8 +388,8 @@
     "7c8096c50daf4e26"
    ],
    "passive": {
-    "name": "",
-    "desc": ""
+    "name": "Darkness isn't your friend",
+    "desc": "Hitting an enemy with two different spells within 3 seconds deals 5% of the target's Maximum Health as Pure Damage (5s CD"
    },
    "active": {
     "on": false,
@@ -408,6 +408,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 16,
+   "publishedAt": 1793502943530,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "NightSword",
+      "lines": [
+       "new passive: Darkness isn't your friend"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 15,
    "publishedAt": 1793502822532,
