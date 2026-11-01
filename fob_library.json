@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 28,
- "publishedAt": 1793507037911,
+ "version": 29,
+ "publishedAt": 1793507699816,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -74,7 +74,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "Never underestimate an old weapon that outlived so many victims.",
    "createdAt": 1793502045657,
    "updatedAt": 1793502045657,
    "dotaId": 8028
@@ -162,8 +162,8 @@
    },
    "components": [],
    "passive": {
-    "name": "Blood Transfusion",
-    "desc": "gain 2 healths regen"
+    "name": "Life Pulse",
+    "desc": "Gain 2 health regen."
    },
    "active": {
     "on": false,
@@ -175,7 +175,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "Radiating with life energy. Take from your foes lest it takes from you.",
    "createdAt": 1793501563999,
    "updatedAt": 1793501563999,
    "dotaId": 8024
@@ -207,7 +207,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "I swear they were brown when I bought them.",
    "createdAt": 1793503479237,
    "updatedAt": 1793503479237,
    "dotaId": 8054
@@ -239,7 +239,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "It's not drugs if it's cultural.",
    "createdAt": 1793504015156,
    "updatedAt": 1793504015156,
    "dotaId": 8056
@@ -332,7 +332,7 @@
    "dotaId": 8002,
    "key": "crystal_fragments",
    "keyEdited": false,
-   "lore": "",
+   "lore": "A pile of energy that once was bound together.",
    "name": "Crystal Fragments",
    "passive": {
     "desc": "",
@@ -400,7 +400,7 @@
    "dotaId": 8000,
    "key": "handy_whetstone",
    "keyEdited": false,
-   "lore": "",
+   "lore": "DO NOT THROW AT YOUR OPPONENT.",
    "name": "Handy Whetstone",
    "passive": {
     "desc": "",
@@ -595,7 +595,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "A waste of good energy for an excuse of a placebo.",
    "createdAt": 1793501630060,
    "updatedAt": 1793501630060,
    "dotaId": 8026
@@ -703,7 +703,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "...do mages need visual aid?",
    "createdAt": 1793504079196,
    "updatedAt": 1793504079196,
    "dotaId": 8044
@@ -760,8 +760,8 @@
    },
    "components": [],
    "passive": {
-    "name": "",
-    "desc": ""
+    "name": "What a steal",
+    "desc": "Take 1 reduced damage from attacks."
    },
    "active": {
     "on": false,
@@ -773,7 +773,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "It might be all orange and brown but at least it's not covered in red yet.",
    "createdAt": 1793504062231,
    "updatedAt": 1793504062231,
    "dotaId": 8042
@@ -805,7 +805,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "What was theirs is now yours.",
    "createdAt": 1793503813719,
    "updatedAt": 1793503813719,
    "dotaId": 8038
@@ -837,13 +837,93 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "Does it ever shut up?..",
    "createdAt": 1793506894020,
    "updatedAt": 1793506894020,
    "dotaId": 8058
   }
  ],
  "releases": [
+  {
+   "version": 29,
+   "publishedAt": 1793507699816,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": " Ol'Mace",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "BloodStone",
+      "lines": [
+       "passive reworked",
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Brown Socks",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Cafi Beans",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Crystal Fragments",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Handy Whetstone",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Mana Pearl",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Old Cloak",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Rusty Armor",
+      "lines": [
+       "new passive: What a steal",
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Sentient Heart",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Smart Crow",
+      "lines": [
+       "lore updated"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 28,
    "publishedAt": 1793507037911,
