@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 18,
- "publishedAt": 1793504692425,
+ "version": 19,
+ "publishedAt": 1793504810710,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -374,14 +374,14 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 4800,
+   "cost": 6300,
    "iconId": "",
    "stats": {
     "health": 1200,
     "hp_regen": 15,
-    "armor": 20,
-    "magic_resist": 20,
-    "str": 25
+    "armor": 30,
+    "magic_resist": 30,
+    "str": 35
    },
    "components": [
     "d4e0e8cc72e64cad",
@@ -616,6 +616,27 @@
   }
  ],
  "releases": [
+  {
+   "version": 19,
+   "publishedAt": 1793504810710,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Heart of a Legend",
+      "lines": [
+       "cost 4,800 → 6,300",
+       "Armor 20 → 30",
+       "Magic Resistance 20% → 30%",
+       "Strength 25 → 35"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 18,
    "publishedAt": 1793504692425,
