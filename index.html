@@ -336,6 +336,8 @@ const STATS = [
   {k:"str",label:"Strength",kv:"bonus_strength",prop:"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS",fn:"GetModifierBonusStats_Strength"},
   {k:"agi",label:"Agility",kv:"bonus_agility",prop:"MODIFIER_PROPERTY_STATS_AGILITY_BONUS",fn:"GetModifierBonusStats_Agility"},
   {k:"int",label:"Intellect",kv:"bonus_intellect",prop:"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS",fn:"GetModifierBonusStats_Intellect"},
+  {k:"all_stats",label:"All Attributes",kv:"bonus_all_stats",attrs:true},
+  {k:"spell_lifesteal",label:"Spell Lifesteal",pct:true,kv:"spell_lifesteal",lifesteal:true},
 ];
 const STAT = Object.fromEntries(STATS.map(s=>[s.k,s]));
 const TIERS = [["component","T1"],["advanced","T2"],["legendary","T3"]];
@@ -483,6 +485,10 @@ function goldValue(k){
   if(r==="manual") return m>0 ? {v:num(m), src:"manual"} : null;
   const ref = r && r!=="auto" ? item(r) : autoRef(k);
   if(ref && num((ref.stats||{})[k])>0 && num(ref.cost)>0) return {v:num(ref.cost)/num(ref.stats[k]), src:"ref", ref};
+  if(k==="all_stats" && (!r || r==="auto")){
+    const parts=["str","agi","int"].map(goldValue);
+    if(parts.every(Boolean)) return {v:parts.reduce((a,p)=>a+p.v,0), src:"sum"};
+  }
   return null;
 }
 function band(t){ const b=(S.config.bands||{})[t]||DEFAULT_BANDS[t]; return [num(b[0]),num(b[1])]; }
@@ -1176,6 +1182,7 @@ async function gh(path, opts={}){
   const r=await fetch(GH_API+path,Object.assign({cache:"no-store"},opts,{headers}));
   let body=null; try{ body=await r.json(); }catch(e){}
   if(!r.ok){ const err=new Error((body&&body.message)||("GitHub answered "+r.status)); err.status=r.status; throw err; }
+  if(opts.withHeaders) return {body, headers:r.headers};
   return body;
 }
 const b64ToText = b64 => { const bin=atob(b64.replace(/\s/g,"")); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new TextDecoder().decode(u); };
@@ -1200,7 +1207,10 @@ async function refreshRemote(){
 }
 async function connectToken(tok){
   S.gh.token=tok.trim();
-  const u=await gh("/user"); const g=ghRepo();
+  const who=await gh("/user",{withHeaders:true}); const u=who.body; const g=ghRepo();
+  const scopes=who.headers.get("x-oauth-scopes");
+  S.gh.kind = scopes===null ? "fine-grained" : "classic";
+  if(scopes!==null && !/(^|,\s*)(public_repo|repo)(\s*,|$)/.test(scopes)){ const e=new Error("this token doesn't have the public_repo box ticked, so it can't change files. Make a new one with the link above."); e.status=0; throw e; }
   const repo=await gh(`/repos/${g.owner}/${g.repo}`);
   S.gh.login=u.login; S.gh.canPush=!!(repo.permissions&&repo.permissions.push);
   try{ localStorage.setItem("fob-gh-token:"+GITHUB_REPO, S.gh.token); }catch(e){}
@@ -1269,12 +1279,15 @@ function drawGhPublish(msg){
   const g=ghRepo();
   let body="";
   if(!S.gh.token){
-    body=`<p class="note" style="margin:0;max-width:64ch">Publishing writes <code>${esc(g.path)}</code> to <b>${esc(g.owner)}/${esc(g.repo)}</b> on GitHub. You need write access to that repo and a token that lets this page use it. The token stays in this browser only.</p>
+    const tokUrl="https://github.com/settings/tokens/new?scopes=public_repo&description=fob-forge%20publishing";
+    body=`<p class="note" style="margin:0;max-width:64ch">A token is a key that lets this page publish to <b>${esc(g.owner)}/${esc(g.repo)}</b> as you, so you never type your GitHub password here. It's saved in this browser only.</p>
       <ol class="steps">
-        <li>Ask <b>${esc(g.owner)}</b> to add you as a collaborator on <b>${esc(g.repo)}</b> (repo Settings → Collaborators) and accept the invite.</li>
-        <li>Open <span class="sel">github.com/settings/personal-access-tokens/new</span>, set <b>Repository access</b> to <i>Only select repositories → ${esc(g.repo)}</i>, and under <b>Permissions → Repository → Contents</b> choose <i>Read and write</i>.</li>
-        <li>Generate the token and paste it here.</li></ol>
-      <label class="lbl">GitHub token<input class="field" id="g-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+        <li>If the repo isn't yours, accept the collaborator invite for <b>${esc(g.repo)}</b> first (it arrives by email or at github.com/notifications).</li>
+        <li>Open <a href="${tokUrl}" target="_blank" rel="noopener">GitHub's new-token page</a> and sign in if asked. The name and the <b>public_repo</b> box are already filled in.</li>
+        <li>Pick an expiration (90 days is fine; you'll just make a new one later), scroll down and click <b>Generate token</b>.</li>
+        <li>Copy the code that starts with <b>ghp_</b>. GitHub shows it only once.</li>
+        <li>Paste it below and click Connect.</li></ol>
+      <label class="lbl">GitHub token<input class="field" id="g-token" type="password" autocomplete="off" spellcheck="false" placeholder="ghp_…"></label>
       <div class="btnrow"><button class="btn primary" data-x="connect">Connect</button></div>`;
   } else if(ghPending && ghPending.conflicts.length){
     const T=itemsMap(ghPending.theirs.items);
@@ -1285,7 +1298,7 @@ function drawGhPublish(msg){
         <label class="conf-o"><input type="radio" name="c-${c.id}" value="theirs" ${ghChoices[c.id]==="theirs"?"checked":""}><span><b>Keep v${ghPending.theirs.version}</b><small>${esc(c.id==="__config"?"their gold values & settings":itemLine(c.theirs))}</small></span></label></div>`; }).join("")}
       <div class="btnrow"><button class="btn primary" data-x="go" ${ghPending.conflicts.every(c=>ghChoices[c.id])?"":"disabled"}>Publish merged version</button><button class="btn" data-x="close">Cancel</button></div>`;
   } else {
-    body=`<p class="note" style="margin:0">Signed in as <b>${esc(S.gh.login)}</b>${S.gh.canPush===false?` · <span style="color:var(--danger)">this account can't write to ${esc(g.owner)}/${esc(g.repo)} yet</span>`:""} · <button class="linkbtn" data-x="forget">Forget token</button></p>
+    body=`<p class="note" style="margin:0">Signed in as <b>${esc(S.gh.login)}</b>${S.gh.kind==="fine-grained"?" (fine-grained token)":""}${S.gh.canPush===false?` · <span style="color:var(--danger)">this account can't write to ${esc(g.owner)}/${esc(g.repo)} yet</span>`:""} · <button class="linkbtn" data-x="forget">Forget token</button></p>
       <h4 class="sub-h">Your changes since v${S.base?S.base.version:0}</h4>
       ${changesHTML(ch)}${cfgChanged?`<p class="note" style="margin:0">Gold values or export settings changed too.</p>`:""}
       <label class="lbl">Notes (optional)<textarea class="field" id="g-notes" placeholder="What you changed and why">${esc(notes)}</textarea></label>
@@ -1338,7 +1351,9 @@ async function publishToGitHub(){
         body:JSON.stringify(Object.assign({message:`Items v${nextV}${notes?": "+notes.split("\n")[0].slice(0,72):""} (by ${S.gh.login})`,content:textToB64(JSON.stringify(lib,null,1)+"\n"),branch:g.branch}, sha?{sha}:{}))});
     }catch(err){
       if(err.status===409||err.status===422) continue;   // the file changed since we read it: read it again and re-merge
-      ghBusy=false; drawGhPublish(err.status===403||err.status===404?`GitHub refused the publish (${err.message}). Your account needs write access to ${g.owner}/${g.repo}.`:"Publishing failed: "+err.message); return;
+      ghBusy=false;
+      const tokenProblem=/personal access token|not accessible by integration/i.test(err.message);
+      drawGhPublish(tokenProblem?`This token isn't allowed to change files in ${g.owner}/${g.repo}. Click Forget token, then make a new one with the GitHub link (keep public_repo ticked). A fine-grained token only works if it's set to this repo with Contents: Read and write.`:err.status===403||err.status===404?`GitHub refused the publish (${err.message}). Your account needs write access to ${g.owner}/${g.repo}; ask ${g.owner} to add you as a collaborator.`:"Publishing failed: "+err.message); return;
     }
     ghBusy=false; ghChoices={}; ghPending=null;
     adopt(lib); closeDialog();
@@ -1439,14 +1454,39 @@ function buildLua(it){
   L.push(`${mod} = class({})`,"");
   L.push(`function ${mod}:IsHidden() return true end`,`function ${mod}:IsPurgable() return false end`,`function ${mod}:RemoveOnDeath() return false end`,`function ${mod}:GetAttributes() return MODIFIER_ATTRIBUTE_MULTIPLE end`,"");
   L.push(`local function sv(m, name)`,`\tlocal ab = m:GetAbility()`,`\treturn ab and ab:GetSpecialValueFor(name) or 0`,`end`,"");
-  const props=stats.map(([k])=>STAT[k]).filter(s=>s.prop);
+  // All Attributes adds to Strength, Agility and Intellect, so those three getters sum both values
+  const hasAll=stats.some(([k])=>k==="all_stats"), hasLs=stats.some(([k])=>k==="spell_lifesteal");
+  const ATTR=["str","agi","int"];
+  const props=[...new Set([...stats.map(([k])=>STAT[k]).filter(s=>s.prop), ...(hasAll?ATTR.map(k=>STAT[k]):[])])];
   L.push(`function ${mod}:DeclareFunctions()`,`\treturn {`);
   props.forEach(s=>L.push(`\t\t${s.prop},`));
+  if(hasLs) L.push(`\t\tMODIFIER_EVENT_ON_TAKEDAMAGE,`);
   if(it.passive&&it.passive.name) L.push(`\t\t-- add events for ${it.passive.name} here, e.g. MODIFIER_EVENT_ON_ATTACK_LANDED`);
   L.push(`\t}`,"end","");
   stats.forEach(([k])=>{ const s=STAT[k];
+    if(s.attrs || s.lifesteal) return;
+    if(hasAll && ATTR.includes(k)) return;
     if(s.custom) L.push(`-- Affinity is a fob stat, not an engine property: read it from your damage code`,`-- by summing GetModifierAffinity() over the hero's item modifiers.`);
     L.push(`function ${mod}:${s.fn}() return sv(self, "${s.kv}") end`); });
+  if(hasAll) ATTR.forEach(k=>{ const s=STAT[k]; const own=stats.some(([x])=>x===k);
+    L.push(`function ${mod}:${s.fn}() return sv(self, "bonus_all_stats")${own?` + sv(self, "${s.kv}")`:""} end`); });
+  if(hasLs){
+    L.push("",`-- Spell Lifesteal: heal for a % of damage dealt by abilities (not attacks)`,
+      `function ${mod}:OnTakeDamage(params)`,
+      `\tif not IsServer() then return end`,
+      `\tlocal parent = self:GetParent()`,
+      `\tif params.attacker ~= parent or params.unit == parent or params.damage <= 0 then return end`,
+      `\tif params.damage_category ~= DOTA_DAMAGE_CATEGORY_SPELL then return end`,
+      `\tif bit.band(params.damage_flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL) ~= 0 then return end`,
+      `\tif params.unit:IsBuilding() or params.unit:IsOther() then return end`,
+      `\tlocal pct = sv(self, "spell_lifesteal")`,
+      `\tif not params.unit:IsHero() then pct = pct * 0.2 end -- Dota's usual reduction against creeps`,
+      `\tlocal heal = params.damage * pct / 100`,
+      `\tparent:HealWithParams(heal, self:GetAbility(), false, true, parent, true)`,
+      `\tlocal fx = ParticleManager:CreateParticle("particles/items3_fx/octarine_core_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent)`,
+      `\tParticleManager:ReleaseParticleIndex(fx)`,
+      `end`);
+  }
   if(it.passive&&it.passive.name){
     L.push("",`-- Passive: ${it.passive.name}`); if(it.passive.desc) L.push(`-- ${it.passive.desc.replace(/\n/g," ")}`);
     L.push(`-- TODO: implement with the events declared above`);
@@ -1556,7 +1596,7 @@ function drawGold(){
     const cur=ref[st.k]||"auto"; const g=goldValue(st.k); const au=autoRef(st.k);
     return `<tr><td><b>${st.label}</b>${st.pct?" %":""}</td>
       <td><select class="field" data-gref="${st.k}" ${ro}>
-        <option value="auto" ${cur==="auto"?"selected":""}>Auto${au?` · ${esc(au.name)}`:" · no pure T1 item"}</option>
+        <option value="auto" ${cur==="auto"?"selected":""}>Auto${au?` · ${esc(au.name)}`:st.k==="all_stats"?" · Strength + Agility + Intellect":" · no pure T1 item"}</option>
         ${cands.map(i=>`<option value="${i.id}" ${cur===i.id?"selected":""}>${esc(i.name)} (${TIER_LABEL[i.tier]}, ${fmt(num(i.cost))}g / ${num(i.stats[st.k])})</option>`).join("")}
         <option value="manual" ${cur==="manual"?"selected":""}>Type a value</option></select></td>
       <td>${cur==="manual"?`<input class="field" type="number" min="0" step="any" data-gman="${st.k}" value="${esc(man[st.k]??"")}" placeholder="gold" ${ro}>`:`<span class="gold">${g?g.v.toFixed(2):"—"}</span>`}</td></tr>`;
