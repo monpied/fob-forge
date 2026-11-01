@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 46,
- "publishedAt": 1793520473526,
+ "version": 47,
+ "publishedAt": 1793521543632,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -1116,13 +1116,31 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "Can be use for farming or for stabing",
    "createdAt": 1793520026415,
    "updatedAt": 1793520026415,
    "dotaId": 8070
   }
  ],
  "releases": [
+  {
+   "version": 47,
+   "publishedAt": 1793521543632,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Villager's Hoe",
+      "lines": [
+       "lore updated"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 46,
    "publishedAt": 1793520473526,
