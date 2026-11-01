@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 20,
- "publishedAt": 1793505018655,
+ "version": 21,
+ "publishedAt": 1793505062766,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -62,38 +62,6 @@
    "createdAt": 1793502045657,
    "updatedAt": 1793502045657,
    "dotaId": 8028
-  },
-  {
-   "id": "40f8a46fa6fe4c6e",
-   "name": "Animal Heart",
-   "key": "animal_heart",
-   "keyEdited": false,
-   "tier": "component",
-   "category": "",
-   "cost": 300,
-   "iconId": "",
-   "stats": {
-    "health": 250
-   },
-   "components": [],
-   "passive": {
-    "name": "",
-    "desc": ""
-   },
-   "active": {
-    "on": false,
-    "name": "",
-    "desc": "",
-    "behavior": "no_target",
-    "cooldown": 20,
-    "mana": 0,
-    "range": 0
-   },
-   "values": [],
-   "lore": "",
-   "createdAt": 1793503813719,
-   "updatedAt": 1793503813719,
-   "dotaId": 8038
   },
   {
    "id": "def981e4c2704334",
@@ -407,6 +375,38 @@
    "dotaId": 8040
   },
   {
+   "id": "40f8a46fa6fe4c6e",
+   "name": "Human Heart",
+   "key": "human_heart",
+   "keyEdited": false,
+   "tier": "component",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {
+    "health": 250
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793503813719,
+   "updatedAt": 1793503813719,
+   "dotaId": 8038
+  },
+  {
    "id": "6054edc8bce84d11",
    "name": "Mana Pearl",
    "key": "mana_pearl",
@@ -618,6 +618,30 @@
   }
  ],
  "releases": [
+  {
+   "version": 21,
+   "publishedAt": 1793505062766,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Heart of a Hero",
+      "lines": [
+       "recipe:  Ol'Mace, Animal Heart →  Ol'Mace, Human Heart"
+      ]
+     },
+     {
+      "name": "Human Heart",
+      "lines": [
+       "renamed from Animal Heart"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 20,
    "publishedAt": 1793505018655,
