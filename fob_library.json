@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 26,
- "publishedAt": 1793505877470,
+ "version": 27,
+ "publishedAt": 1793506015086,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -405,10 +405,10 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 1100,
+   "cost": 1225,
    "iconId": "",
    "stats": {
-    "health": 450,
+    "health": 666,
     "hp_regen": 5,
     "str": 10
    },
@@ -442,7 +442,7 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 7500,
+   "cost": 7100,
    "iconId": "",
    "stats": {
     "health": 1200,
@@ -796,6 +796,31 @@
   }
  ],
  "releases": [
+  {
+   "version": 27,
+   "publishedAt": 1793506015086,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Heart of a Hero",
+      "lines": [
+       "cost 1,100 → 1,225",
+       "Health 450 → 666"
+      ]
+     },
+     {
+      "name": "Heart of a Legend",
+      "lines": [
+       "cost 7,500 → 7,100"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 26,
    "publishedAt": 1793505877470,
