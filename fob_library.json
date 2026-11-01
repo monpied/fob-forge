@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 35,
- "publishedAt": 1793511349100,
+ "version": 36,
+ "publishedAt": 1793511607458,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -211,7 +211,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "If one crow isn't enough maybe three will?...",
    "createdAt": 1793508069547,
    "updatedAt": 1793508069547,
    "dotaId": 8062
@@ -778,7 +778,7 @@
     "range": 0
    },
    "values": [],
-   "lore": "",
+   "lore": "Surely this one will make me smart enough...",
    "createdAt": 1793508293122,
    "updatedAt": 1793508293122,
    "dotaId": 8064
@@ -992,6 +992,30 @@
   }
  ],
  "releases": [
+  {
+   "version": 36,
+   "publishedAt": 1793511607458,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Brain Amalgam",
+      "lines": [
+       "lore updated"
+      ]
+     },
+     {
+      "name": "Omniscient Brain ",
+      "lines": [
+       "lore updated"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 35,
    "publishedAt": 1793511349100,
