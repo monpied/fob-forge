@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 29,
- "publishedAt": 1793507699816,
+ "version": 30,
+ "publishedAt": 1793507936873,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -86,7 +86,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 675,
+   "cost": 1100,
    "iconId": "",
    "stats": {
     "str": 20
@@ -120,7 +120,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 950,
+   "cost": 650,
    "iconId": "",
    "stats": {
     "spell_lifesteal": 15
@@ -246,8 +246,8 @@
   },
   {
    "id": "7c8096c50daf4e26",
-   "name": "Charged Hearth",
-   "key": "charged_hearth",
+   "name": "Charged Gemstone",
+   "key": "charged_gemstone",
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
@@ -645,7 +645,7 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 7500,
+   "cost": 7000,
    "iconId": "",
    "stats": {
     "spell_lifesteal": 25,
@@ -655,6 +655,7 @@
    },
    "components": [
     "c8e536b536134258",
+    "812c3ebe661c4ce0",
     "7c8096c50daf4e26"
    ],
    "passive": {
@@ -707,6 +708,43 @@
    "createdAt": 1793504079196,
    "updatedAt": 1793504079196,
    "dotaId": 8044
+  },
+  {
+   "id": "812c3ebe661c4ce0",
+   "name": "Orb of Darkness",
+   "key": "orb_of_darkness",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "",
+   "cost": 1400,
+   "iconId": "",
+   "stats": {
+    "affinity": 60,
+    "int": 10,
+    "mana_regen": 2.5
+   },
+   "components": [
+    "233c58f1c9f64feb",
+    "233c58f1c9f64feb"
+   ],
+   "passive": {
+    "name": "Sleep Well",
+    "desc": "Gain 50% mana regen amp when it's night time"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793506781058,
+   "updatedAt": 1793506781058,
+   "dotaId": 8060
   },
   {
    "id": "77bca9ad585b4106",
@@ -844,6 +882,51 @@
   }
  ],
  "releases": [
+  {
+   "version": 30,
+   "publishedAt": 1793507936873,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Orb of Darkness"
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Big Ol'Mace",
+      "lines": [
+       "cost 675 → 1,100"
+      ]
+     },
+     {
+      "name": "Blood Crystal",
+      "lines": [
+       "cost 950 → 650"
+      ]
+     },
+     {
+      "name": "Charged Gemstone",
+      "lines": [
+       "renamed from Charged Hearth"
+      ]
+     },
+     {
+      "name": "Cloak of Time",
+      "lines": [
+       "recipe: Charged Hearth ×3 → Charged Gemstone ×3"
+      ]
+     },
+     {
+      "name": "NightSword",
+      "lines": [
+       "cost 7,500 → 7,000",
+       "recipe: Blood Crystal, Charged Hearth → Blood Crystal, Charged Gemstone, Orb of Darkness"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 29,
    "publishedAt": 1793507699816,
