@@ -1,9 +1,19 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 1,
- "publishedAt": 1793429581976,
+ "version": 13,
+ "publishedAt": 1793488869926,
  "config": {
+  "prefix": "item_fob_",
+  "idStart": 8000,
+  "goldRef": {
+   "affinity": "manual",
+   "damage": "manual"
+  },
+  "goldManual": {
+   "affinity": 20,
+   "damage": 30
+  },
   "bands": {
    "advanced": [
     105,
@@ -18,20 +28,83 @@
     120
    ]
   },
-  "goldManual": {
-   "affinity": 20,
-   "damage": 30
-  },
-  "goldRef": {
-   "affinity": "manual",
-   "damage": "manual"
-  },
-  "idStart": 8000,
-  "nodesV": 2,
-  "prefix": "item_fob_"
+  "nodesV": 2
  },
  "items": [
   {
+   "id": "7c8096c50daf4e26",
+   "name": "Charged Hearth",
+   "key": "charged_hearth",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {
+    "int": 25,
+    "str": 25,
+    "agi": 25
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793488769068,
+   "updatedAt": 1793488769068,
+   "dotaId": 8020
+  },
+  {
+   "id": "6b6b1e1337c04d26",
+   "name": "Cloak of Time",
+   "key": "cloak_of_time",
+   "keyEdited": false,
+   "tier": "legendary",
+   "category": "",
+   "cost": 300,
+   "iconId": "",
+   "stats": {
+    "str": 100,
+    "agi": 100,
+    "int": 100
+   },
+   "components": [
+    "7c8096c50daf4e26",
+    "7c8096c50daf4e26",
+    "7c8096c50daf4e26"
+   ],
+   "passive": {
+    "name": "Roll back the clock",
+    "desc": "Reduced attacks speeds of enemies attacking you by 20%"
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793488640954,
+   "updatedAt": 1793488640954,
+   "dotaId": 8018
+  },
+  {
+   "id": "233c58f1c9f64feb",
    "active": {
     "behavior": "no_target",
     "cooldown": 20,
@@ -46,7 +119,6 @@
    "cost": 400,
    "createdAt": 1793428642910,
    "dotaId": 8002,
-   "id": "233c58f1c9f64feb",
    "key": "crystal_fragments",
    "keyEdited": false,
    "lore": "",
@@ -64,6 +136,7 @@
    "iconData": "data:image/png;base64,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"
   },
   {
+   "id": "db3b2bc3c5304cb0",
    "active": {
     "behavior": "no_target",
     "cooldown": 20,
@@ -78,7 +151,6 @@
    "cost": 300,
    "createdAt": 1793428580843,
    "dotaId": 8000,
-   "id": "db3b2bc3c5304cb0",
    "key": "handy_whetstone",
    "keyEdited": false,
    "lore": "",
@@ -97,6 +169,175 @@
   }
  ],
  "releases": [
+  {
+   "version": 13,
+   "publishedAt": 1793488869926,
+   "by": "monpied",
+   "notes": "Removed troll items",
+   "changes": {
+    "added": [],
+    "removed": [
+     "68",
+     "Manly man for carl",
+     "Test Item"
+    ],
+    "changed": []
+   }
+  },
+  {
+   "version": 12,
+   "publishedAt": 1793488856997,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Charged Hearth",
+     "Cloak of Time"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 11,
+   "publishedAt": 1793488680919,
+   "by": "monpied",
+   "notes": "carl",
+   "changes": {
+    "added": [
+     "Manly man for carl"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 10,
+   "publishedAt": 1793432182698,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [
+     "67",
+     "67",
+     "68",
+     "New item"
+    ],
+    "changed": [
+     {
+      "name": "Test Item",
+      "lines": [
+       "new passive: read this olivier"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "version": 9,
+   "publishedAt": 1793432142091,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "68"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 8,
+   "publishedAt": 1793432141891,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "68"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 7,
+   "publishedAt": 1793432095152,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "67"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 6,
+   "publishedAt": 1793432081332,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "67"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 5,
+   "publishedAt": 1793432028741,
+   "by": "monpied",
+   "notes": "progging",
+   "changes": {
+    "added": [
+     "New item"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 4,
+   "publishedAt": 1793431989164,
+   "by": "monpied",
+   "notes": "because fuck olivier",
+   "changes": {
+    "added": [],
+    "removed": [
+     "olivier gaping asshole"
+    ],
+    "changed": []
+   }
+  },
+  {
+   "version": 3,
+   "publishedAt": 1793431905170,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "olivier gaping asshole"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
+  {
+   "version": 2,
+   "publishedAt": 1793431842710,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Test Item"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 1,
    "publishedAt": 1793429581976,
