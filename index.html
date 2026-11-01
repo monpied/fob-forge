@@ -1087,6 +1087,7 @@ function drawReleaseBar(){
     $("#status").textContent = n ? `${n} unpublished change${n===1?"":"s"}` : "Up to date";
     $("#status").className = "status "+(n?"warn":"live");
     bar.innerHTML=`<button class="btn ghost sm" data-x="updates">${S.base&&S.base.version?`v${S.base.version}`:"Not published yet"}${newer?` · v${S.remote.version} online`:""}</button>
+      ${n?`<button class="btn ghost sm danger" data-x="discardbar" title="Throw away your unpublished edits and reload the live library">Discard changes</button>`:""}
       <button class="btn primary sm" data-x="ghpublish" ${n||!S.gh.token?"":"disabled"}>${S.gh.token?`Publish to GitHub${n?` · ${n}`:""}`:"Connect GitHub"}</button>`;
     return;
   }
@@ -1106,6 +1107,10 @@ $("#relbar").addEventListener("click",e=>{
   if(b.dataset.x==="updates") openUpdates();
   if(b.dataset.x==="publish") openPublish();
   if(b.dataset.x==="ghpublish") openGhPublish();
+  if(b.dataset.x==="discardbar"){
+    if(b.dataset.armed){ b.disabled=true; b.textContent="Reloading…"; discardToLive(); }
+    else { b.dataset.armed="1"; b.textContent="Click again to discard"; setTimeout(()=>{ if(document.body.contains(b)){ delete b.dataset.armed; b.textContent="Discard changes"; } },4000); }
+  }
 });
 
 // ---------- viewer library (fob_library.json) ----------
@@ -1216,6 +1221,16 @@ async function connectToken(tok){
   try{ localStorage.setItem("fob-gh-token:"+GITHUB_REPO, S.gh.token); }catch(e){}
   return S.gh.canPush;
 }
+async function discardToLive(){
+  let lib=null;
+  try{ lib = S.gh.token ? (await readRepoLibrary()).lib : await readPublicLibrary(); }catch(e){}
+  if(!lib) lib = S.remote || S.base;
+  if(!lib){ toast("Couldn't reach GitHub. Try again when you're online."); return; }
+  ghChoices={}; ghPending=null;
+  try{ localStorage.removeItem("fob-gh-work:"+GITHUB_REPO); }catch(e){}
+  adopt(lib); closeDialog();
+  toast(`Your changes were discarded. You're on v${lib.version||0}, the live version.`);
+}
 function forgetToken(){ S.gh={token:"",login:"",canPush:null}; try{ localStorage.removeItem("fob-gh-token:"+GITHUB_REPO); }catch(e){} render(); }
 
 // --- three-way merge: base (what you started from), mine (your copy), theirs (newest online) ---
@@ -1314,7 +1329,7 @@ function drawGhPublish(msg){
     const b=e.target.closest("button"); if(!b||ghBusy) return;
     if(b.dataset.x==="close"){ closeDialog(); return; }
     if(b.dataset.x==="forget"){ forgetToken(); drawGhPublish(); return; }
-    if(b.dataset.x==="discard"){ if(b.dataset.armed){ adopt(S.remote&&num(S.remote.version)>=num(S.base.version)?S.remote:S.base); closeDialog(); toast("Your changes were discarded"); } else { b.dataset.armed="1"; b.textContent="Click again to discard"; } return; }
+    if(b.dataset.x==="discard"){ if(b.dataset.armed){ discardToLive(); } else { b.dataset.armed="1"; b.textContent="Click again to discard"; } return; }
     if(b.dataset.x==="connect"){
       const tok=$("#g-token").value; if(!tok.trim()) return;
       ghBusy=true; drawGhPublish("Checking the token…");
