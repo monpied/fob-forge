@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 44,
- "publishedAt": 1793520198172,
+ "version": 45,
+ "publishedAt": 1793520220115,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -1024,8 +1024,7 @@
    "components": [
     "b7d7fa84fe9741b9",
     "8ee0f6d6ff074b96",
-    "ee9fbc4c9b40401c",
-    "def981e4c2704334"
+    "ee9fbc4c9b40401c"
    ],
    "passive": {
     "name": "Bravery",
@@ -1087,6 +1086,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 45,
+   "publishedAt": 1793520220115,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Spear of the Folk Hero",
+      "lines": [
+       "recipe: Big Ol'Mace, Brown Socks, Cafi Bean, Villager's Hoe → Brown Socks, Cafi Bean, Villager's Hoe"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 44,
    "publishedAt": 1793520198172,
