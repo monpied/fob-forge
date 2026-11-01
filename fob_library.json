@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 42,
- "publishedAt": 1793519999852,
+ "version": 43,
+ "publishedAt": 1793520153081,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -1015,17 +1015,16 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "Fighter",
-   "cost": 2450,
+   "cost": 2600,
    "iconId": "",
    "stats": {
-    "agi": 20,
+    "agi": 25,
     "attack_speed": 50
    },
    "components": [
+    "b7d7fa84fe9741b9",
     "8ee0f6d6ff074b96",
-    "b7d7fa84fe9741b9",
-    "b7d7fa84fe9741b9",
-    "8ee0f6d6ff074b96"
+    "ee9fbc4c9b40401c"
    ],
    "passive": {
     "name": "Bravery",
@@ -1045,9 +1044,70 @@
    "createdAt": 1793509832352,
    "updatedAt": 1793509832352,
    "dotaId": 8066
+  },
+  {
+   "id": "ee9fbc4c9b40401c",
+   "name": "Villager's Hoe",
+   "key": "villagers_hoe",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "Fighter",
+   "categories": [
+    "Fighter"
+   ],
+   "cost": 1150,
+   "iconId": "",
+   "stats": {
+    "agi": 12,
+    "attack_speed": 20
+   },
+   "components": [
+    "8ee0f6d6ff074b96",
+    "b7d7fa84fe9741b9"
+   ],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793520026415,
+   "updatedAt": 1793520026415,
+   "dotaId": 8070
   }
  ],
  "releases": [
+  {
+   "version": 43,
+   "publishedAt": 1793520153081,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Villager's Hoe"
+    ],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Spear of the Folk Hero",
+      "lines": [
+       "cost 2,450 → 2,600",
+       "Agility 20 → 25",
+       "recipe: Brown Socks ×2, Cafi Bean ×2 → Brown Socks, Cafi Bean, Villager's Hoe"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 42,
    "publishedAt": 1793519999852,
