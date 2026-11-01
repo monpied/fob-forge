@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 14,
- "publishedAt": 1793502593312,
+ "version": 15,
+ "publishedAt": 1793502822532,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -350,8 +350,8 @@
     "db3b2bc3c5304cb0"
    ],
    "passive": {
-    "name": "",
-    "desc": ""
+    "name": "Mana Hungry",
+    "desc": "Steal 4 mana on attack"
    },
    "active": {
     "on": false,
@@ -408,6 +408,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 15,
+   "publishedAt": 1793502822532,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Mana-Touched Stick",
+      "lines": [
+       "new passive: Mana Hungry"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 14,
    "publishedAt": 1793502593312,
