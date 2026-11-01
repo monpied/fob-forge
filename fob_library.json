@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 41,
- "publishedAt": 1793519365790,
+ "version": 42,
+ "publishedAt": 1793519999852,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -185,7 +185,7 @@
    "name": "Brain Amalgam",
    "key": "brain_amalgam",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "Fighter",
    "cost": 1850,
    "iconId": "",
@@ -287,7 +287,7 @@
    "name": "Charged Gemstone",
    "key": "charged_gemstone",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "",
    "cost": 3050,
    "iconId": "",
@@ -323,7 +323,7 @@
    "key": "cloak_of_time",
    "keyEdited": false,
    "tier": "mythic",
-   "category": "",
+   "category": "Fighter",
    "cost": 10000,
    "iconId": "",
    "stats": {
@@ -351,7 +351,12 @@
    "lore": "",
    "createdAt": 1793488640954,
    "updatedAt": 1793488640954,
-   "dotaId": 8018
+   "dotaId": 8018,
+   "categories": [
+    "Fighter",
+    "Mage",
+    "Tank"
+   ]
   },
   {
    "id": "233c58f1c9f64feb",
@@ -613,7 +618,7 @@
    "key": "mana_pearl",
    "keyEdited": false,
    "tier": "component",
-   "category": "",
+   "category": "Fighter",
    "cost": 750,
    "iconId": "",
    "stats": {
@@ -637,7 +642,12 @@
    "lore": "A waste of good energy, a placebo in its stead.",
    "createdAt": 1793501630060,
    "updatedAt": 1793501630060,
-   "dotaId": 8026
+   "dotaId": 8026,
+   "categories": [
+    "Fighter",
+    "Mage",
+    "Tank"
+   ]
   },
   {
    "id": "b06da36950494bea",
@@ -675,7 +685,11 @@
    "lore": "",
    "createdAt": 1793502450807,
    "updatedAt": 1793502450807,
-   "dotaId": 8034
+   "dotaId": 8034,
+   "categories": [
+    "Fighter",
+    "Mage"
+   ]
   },
   {
    "id": "00f4805ca3bf4442",
@@ -788,25 +802,26 @@
   },
   {
    "id": "812c3ebe661c4ce0",
-   "name": "Orb of Darkness(a rendre t3)",
-   "key": "orb_of_darknessa_rendre_t3",
+   "name": "Orb of Darkness",
+   "key": "orb_of_darkness",
    "keyEdited": false,
    "tier": "legendary",
    "category": "Mage",
-   "cost": 1750,
+   "cost": 2450,
    "iconId": "",
    "stats": {
     "affinity": 60,
     "int": 10,
-    "mana_regen": 2.5
+    "mana_regen": 2.5,
+    "spell_lifesteal": 15
    },
    "components": [
-    "233c58f1c9f64feb",
-    "233c58f1c9f64feb"
+    "aa76f80ceeca48c1",
+    "c8e536b536134258"
    ],
    "passive": {
     "name": "Sleep Well",
-    "desc": "Gain 50% mana regen amp when it's night time"
+    "desc": "Gain 50% mana regen amp and 50% health regen amp when it's night time"
    },
    "active": {
     "on": false,
@@ -828,7 +843,7 @@
    "name": "Paladin Armor",
    "key": "paladin_armor",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "Tank",
    "cost": 1900,
    "iconId": "",
@@ -998,7 +1013,7 @@
    "name": "Spear of the Folk Hero",
    "key": "spear_of_the_folk_hero",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "Fighter",
    "cost": 2450,
    "iconId": "",
@@ -1033,6 +1048,82 @@
   }
  ],
  "releases": [
+  {
+   "version": 42,
+   "publishedAt": 1793519999852,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Brain Amalgam",
+      "lines": [
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Charged Gemstone",
+      "lines": [
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Cloak of Time",
+      "lines": [
+       "shop categories none → Fighter, Mage, Tank"
+      ]
+     },
+     {
+      "name": "Mana Pearl",
+      "lines": [
+       "shop categories none → Fighter, Mage, Tank"
+      ]
+     },
+     {
+      "name": "Mana-Touched Stick",
+      "lines": [
+       "shop categories Fighter → Fighter, Mage"
+      ]
+     },
+     {
+      "name": "NightSword",
+      "lines": [
+       "recipe: Blood Crystal, Charged Gemstone, Orb of Darkness(a rendre t3) → Blood Crystal, Charged Gemstone, Orb of Darkness"
+      ]
+     },
+     {
+      "name": "Omniscient Brain ",
+      "lines": [
+       "recipe: Brain Amalgam, Orb of Darkness(a rendre t3) → Brain Amalgam, Orb of Darkness"
+      ]
+     },
+     {
+      "name": "Orb of Darkness",
+      "lines": [
+       "renamed from Orb of Darkness(a rendre t3)",
+       "cost 1,750 → 2,450",
+       "now gives +15% Spell Lifesteal",
+       "recipe: Crystal Fragments ×2 → Blood Crystal, Reforged Crystal",
+       "passive reworked"
+      ]
+     },
+     {
+      "name": "Paladin Armor",
+      "lines": [
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Spear of the Folk Hero",
+      "lines": [
+       "T2 → T3"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 41,
    "publishedAt": 1793519365790,
