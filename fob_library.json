@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 25,
- "publishedAt": 1793505507865,
+ "version": 26,
+ "publishedAt": 1793505877470,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -139,7 +139,7 @@
    "keyEdited": false,
    "tier": "component",
    "category": "",
-   "cost": 300,
+   "cost": 200,
    "iconId": "",
    "stats": {
     "spell_lifesteal": 5
@@ -559,10 +559,10 @@
    "keyEdited": false,
    "tier": "component",
    "category": "",
-   "cost": 300,
+   "cost": 333,
    "iconId": "",
    "stats": {
-    "health": 250
+    "health": 333
    },
    "components": [],
    "passive": {
@@ -796,6 +796,31 @@
   }
  ],
  "releases": [
+  {
+   "version": 26,
+   "publishedAt": 1793505877470,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "BloodStone",
+      "lines": [
+       "cost 300 → 200"
+      ]
+     },
+     {
+      "name": "Human Heart",
+      "lines": [
+       "cost 300 → 333",
+       "Health 250 → 333"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 25,
    "publishedAt": 1793505507865,
