@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 39,
- "publishedAt": 1793518367945,
+ "version": 40,
+ "publishedAt": 1793518597650,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -862,6 +862,39 @@
    "dotaId": 8046
   },
   {
+   "id": "aa76f80ceeca48c1",
+   "name": "Reforged Crystal",
+   "key": "reforged_crystal",
+   "keyEdited": false,
+   "tier": "advanced",
+   "category": "Mage",
+   "cost": 850,
+   "iconId": "",
+   "stats": {},
+   "components": [
+    "233c58f1c9f64feb",
+    "233c58f1c9f64feb"
+   ],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793517982026,
+   "updatedAt": 1793517982026,
+   "dotaId": 8068
+  },
+  {
    "id": "fbf0b51ab9c04856",
    "name": "Rusty Armor",
    "key": "rusty_armor",
@@ -998,6 +1031,19 @@
   }
  ],
  "releases": [
+  {
+   "version": 40,
+   "publishedAt": 1793518597650,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Reforged Crystal"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 39,
    "publishedAt": 1793518367945,
