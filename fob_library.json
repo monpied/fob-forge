@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 37,
- "publishedAt": 1793514077185,
+ "version": 38,
+ "publishedAt": 1793517639282,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -788,10 +788,10 @@
   },
   {
    "id": "812c3ebe661c4ce0",
-   "name": "Orb of Darkness",
-   "key": "orb_of_darkness",
+   "name": "Orb of Darkness(a rendre t3)",
+   "key": "orb_of_darknessa_rendre_t3",
    "keyEdited": false,
-   "tier": "advanced",
+   "tier": "legendary",
    "category": "",
    "cost": 1750,
    "iconId": "",
@@ -973,7 +973,9 @@
    },
    "components": [
     "8ee0f6d6ff074b96",
-    "b7d7fa84fe9741b9"
+    "b7d7fa84fe9741b9",
+    "b7d7fa84fe9741b9",
+    "8ee0f6d6ff074b96"
    ],
    "passive": {
     "name": "Bravery",
@@ -996,6 +998,43 @@
   }
  ],
  "releases": [
+  {
+   "version": 38,
+   "publishedAt": 1793517639282,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "NightSword",
+      "lines": [
+       "recipe: Blood Crystal, Charged Gemstone, Orb of Darkness → Blood Crystal, Charged Gemstone, Orb of Darkness(a rendre t3)"
+      ]
+     },
+     {
+      "name": "Omniscient Brain ",
+      "lines": [
+       "recipe: Brain Amalgam, Orb of Darkness → Brain Amalgam, Orb of Darkness(a rendre t3)"
+      ]
+     },
+     {
+      "name": "Orb of Darkness(a rendre t3)",
+      "lines": [
+       "renamed from Orb of Darkness",
+       "T2 → T3"
+      ]
+     },
+     {
+      "name": "Spear of the Folk Hero",
+      "lines": [
+       "recipe: Brown Socks, Cafi Bean → Brown Socks ×2, Cafi Bean ×2"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 37,
    "publishedAt": 1793514077185,
