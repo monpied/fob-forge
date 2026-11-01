@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 19,
- "publishedAt": 1793504810710,
+ "version": 20,
+ "publishedAt": 1793505018655,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -374,7 +374,7 @@
    "keyEdited": false,
    "tier": "legendary",
    "category": "",
-   "cost": 6300,
+   "cost": 8000,
    "iconId": "",
    "stats": {
     "health": 1200,
@@ -521,7 +521,7 @@
    "keyEdited": false,
    "tier": "component",
    "category": "",
-   "cost": 300,
+   "cost": 400,
    "iconId": "",
    "stats": {
     "magic_resist": 10
@@ -553,7 +553,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 1000,
+   "cost": 1950,
    "iconId": "",
    "stats": {
     "armor": 15,
@@ -561,7 +561,9 @@
    },
    "components": [
     "1d4bfcba3dad4c9b",
-    "fbf0b51ab9c04856"
+    "fbf0b51ab9c04856",
+    "fbf0b51ab9c04856",
+    "1d4bfcba3dad4c9b"
    ],
    "passive": {
     "name": "Protected by Faith",
@@ -589,10 +591,10 @@
    "keyEdited": false,
    "tier": "component",
    "category": "",
-   "cost": 300,
+   "cost": 400,
    "iconId": "",
    "stats": {
-    "armor": 10
+    "armor": 5
    },
    "components": [],
    "passive": {
@@ -616,6 +618,44 @@
   }
  ],
  "releases": [
+  {
+   "version": 20,
+   "publishedAt": 1793505018655,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Heart of a Legend",
+      "lines": [
+       "cost 6,300 → 8,000"
+      ]
+     },
+     {
+      "name": "Old Cloak",
+      "lines": [
+       "cost 300 → 400"
+      ]
+     },
+     {
+      "name": "Paladin Armor",
+      "lines": [
+       "cost 1,000 → 1,950",
+       "recipe: Old Cloak, Rusty Armor → Old Cloak ×2, Rusty Armor ×2"
+      ]
+     },
+     {
+      "name": "Rusty Armor",
+      "lines": [
+       "cost 300 → 400",
+       "Armor 10 → 5"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 19,
    "publishedAt": 1793504810710,
