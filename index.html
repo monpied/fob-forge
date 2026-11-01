@@ -182,16 +182,19 @@ button.catbtn:hover,button.catbtn[aria-expanded="true"]{border-color:var(--mana)
 .cm-new .field{flex:1;min-width:0;padding:6px 9px}
 .cm-foot{margin:0;padding:0 12px 9px;font-size:11.5px;color:var(--faint)}
 .partmenu{position:fixed;z-index:36;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;font-family:var(--f-ui)}
-.pm-h{padding:10px 12px 6px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.partmenu #pm-q{margin:0 8px 6px;width:auto}
-.pm-list{overflow:auto;padding:0 6px 6px;min-height:0;display:grid;gap:1px;align-content:start}
+.pm-h{flex:none;padding:9px 12px 0;line-height:1.35;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.partmenu #pm-q{flex:none;margin:8px 8px 6px;width:auto;box-sizing:border-box}
+.pm-list{flex:1 1 auto;overflow:auto;padding:0 6px 6px;min-height:0;display:grid;gap:1px;align-content:start}
 .pm-row{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:7px;cursor:pointer}
 .pm-row[data-on]{background:var(--mana-soft)}
 .pm-row .nm{flex:1;min-width:0;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pm-row .nm small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
 .pm-row .gold{font-size:12.5px}
 .pm-new .plus{width:28px;height:20px;display:grid;place-items:center;border:1px dashed var(--line-2);border-radius:4px;color:var(--mana);font-weight:700}
-.pm-foot{margin:0;padding:6px 12px 8px;border-top:1px solid var(--line);font-size:11px;color:var(--faint)}
+.pm-foot{flex:none;margin:0;padding:6px 12px 8px;border-top:1px solid var(--line);font-size:11px;color:var(--faint)}
+.refresh{font-size:16px;width:30px;height:30px}
+.refresh.spin{animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .relbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .seg-sm{grid-template-columns:auto auto;width:auto}
 .seg-sm button{padding:4px 10px;font-size:12.5px}
@@ -1473,7 +1476,8 @@ function drawReleaseBar(){
     const newer=S.remote&&S.base&&num(S.remote.version)>num(S.base.version);
     $("#status").textContent = n ? `${n} unpublished change${n===1?"":"s"}` : "Up to date";
     $("#status").className = "status "+(n?"warn":"live");
-    bar.innerHTML=`<button class="btn ghost sm" data-x="updates">${S.base&&S.base.version?`v${S.base.version}`:"Not published yet"}${newer?` · v${S.remote.version} online`:""}</button>
+    bar.innerHTML=`<button class="btn ghost sm icon-btn refresh${S.checking?" spin":""}" data-x="refresh" title="Check GitHub for a newer published version" aria-label="Check for updates" ${S.checking?"disabled":""}>↻</button>
+      <button class="btn ghost sm" data-x="updates">${S.base&&S.base.version?`v${S.base.version}`:"Not published yet"}${newer?` · v${S.remote.version} online`:""}</button>
       ${n?`<button class="btn ghost sm danger" data-x="discardbar" title="Throw away your unpublished edits and reload the live library">Discard changes</button>`:""}
       <button class="btn primary sm" data-x="ghpublish" ${n||!S.gh.token?"":"disabled"}>${S.gh.token?`Publish to GitHub${n?` · ${n}`:""}`:"Connect GitHub"}</button>`;
     return;
@@ -1494,6 +1498,7 @@ $("#relbar").addEventListener("click",e=>{
   if(b.dataset.x==="updates") openUpdates();
   if(b.dataset.x==="publish") openPublish();
   if(b.dataset.x==="ghpublish") openGhPublish();
+  if(b.dataset.x==="refresh") checkForUpdates();
   if(b.dataset.x==="discardbar"){
     if(b.dataset.armed){ b.disabled=true; b.textContent="Reloading…"; discardToLive(); }
     else { b.dataset.armed="1"; b.textContent="Click again to discard"; setTimeout(()=>{ if(document.body.contains(b)){ delete b.dataset.armed; b.textContent="Discard changes"; } },4000); }
@@ -1597,6 +1602,19 @@ async function readPublicLibrary(){
 async function refreshRemote(){
   try{ const lib = S.gh.token ? (await readRepoLibrary()).lib : await readPublicLibrary(); onRemote(lib||emptyLibrary()); S.loadFailed=false; return true; }
   catch(e){ S.loadFailed=!S.base; render(); return false; }
+}
+async function checkForUpdates(){
+  if(S.checking) return;
+  S.checking=true; render();
+  const before = S.remote ? num(S.remote.version) : null;
+  const ok = await refreshRemote();
+  S.checking=false; render();
+  if(!ok){ toast("Couldn't reach GitHub. Check your connection and try again."); return; }
+  const now = S.remote ? num(S.remote.version) : 0;
+  if(before!==null && now>before) return;   // onRemote already announced the new version
+  toast(hasEdits()
+    ? `v${now} is still the latest. Your unpublished changes are kept.`
+    : `You're up to date: v${now} is the latest version.`);
 }
 async function connectToken(tok){
   S.gh.token=tok.trim();
