@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 33,
- "publishedAt": 1793511084456,
+ "version": 34,
+ "publishedAt": 1793511274453,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -961,7 +961,7 @@
    "keyEdited": false,
    "tier": "advanced",
    "category": "",
-   "cost": 2350,
+   "cost": 2450,
    "iconId": "",
    "stats": {
     "agi": 20,
@@ -992,6 +992,24 @@
   }
  ],
  "releases": [
+  {
+   "version": 34,
+   "publishedAt": 1793511274453,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [],
+    "removed": [],
+    "changed": [
+     {
+      "name": "Spear of the Folk Hero",
+      "lines": [
+       "cost 2,350 → 2,450"
+      ]
+     }
+    ]
+   }
+  },
   {
    "version": 33,
    "publishedAt": 1793511084456,
