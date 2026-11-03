@@ -387,6 +387,7 @@ const STATS = [
   {k:"agi",label:"Agility",kv:"bonus_agility",prop:"MODIFIER_PROPERTY_STATS_AGILITY_BONUS",fn:"GetModifierBonusStats_Agility"},
   {k:"int",label:"Intellect",kv:"bonus_intellect",prop:"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS",fn:"GetModifierBonusStats_Intellect"},
   {k:"all_stats",label:"All Attributes",kv:"bonus_all_stats",attrs:true},
+  {k:"lifesteal",label:"Lifesteal",pct:true,kv:"lifesteal",lifesteal:true},
   {k:"spell_lifesteal",label:"Spell Lifesteal",pct:true,kv:"spell_lifesteal",lifesteal:true},
 ];
 const STAT = Object.fromEntries(STATS.map(s=>[s.k,s]));
@@ -1933,7 +1934,7 @@ function buildLua(it){
   L.push(`function ${mod}:IsHidden() return true end`,`function ${mod}:IsPurgable() return false end`,`function ${mod}:RemoveOnDeath() return false end`,`function ${mod}:GetAttributes() return MODIFIER_ATTRIBUTE_MULTIPLE end`,"");
   L.push(`local function sv(m, name)`,`\tlocal ab = m:GetAbility()`,`\treturn ab and ab:GetSpecialValueFor(name) or 0`,`end`,"");
   // All Attributes adds to Strength, Agility and Intellect, so those three getters sum both values
-  const hasAll=stats.some(([k])=>k==="all_stats"), hasLs=stats.some(([k])=>k==="spell_lifesteal");
+  const hasAll=stats.some(([k])=>k==="all_stats"), hasSls=stats.some(([k])=>k==="spell_lifesteal"), hasAls=stats.some(([k])=>k==="lifesteal"), hasLs=hasSls||hasAls;
   const ATTR=["str","agi","int"];
   const props=[...new Set([...stats.map(([k])=>STAT[k]).filter(s=>s.prop), ...(hasAll?ATTR.map(k=>STAT[k]):[])])];
   L.push(`function ${mod}:DeclareFunctions()`,`\treturn {`);
@@ -1949,21 +1950,32 @@ function buildLua(it){
   if(hasAll) ATTR.forEach(k=>{ const s=STAT[k]; const own=stats.some(([x])=>x===k);
     L.push(`function ${mod}:${s.fn}() return sv(self, "bonus_all_stats")${own?` + sv(self, "${s.kv}")`:""} end`); });
   if(hasLs){
-    L.push("",`-- Spell Lifesteal: heal for a % of damage dealt by abilities (not attacks)`,
+    L.push("",`-- ${[hasAls&&"Lifesteal (attacks)",hasSls&&"Spell Lifesteal (abilities)"].filter(Boolean).join(" and ")}: heal for a % of the damage dealt`,
       `function ${mod}:OnTakeDamage(params)`,
       `\tif not IsServer() then return end`,
       `\tlocal parent = self:GetParent()`,
       `\tif params.attacker ~= parent or params.unit == parent or params.damage <= 0 then return end`,
-      `\tif params.damage_category ~= DOTA_DAMAGE_CATEGORY_SPELL then return end`,
-      `\tif bit.band(params.damage_flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL) ~= 0 then return end`,
-      `\tif params.unit:IsBuilding() or params.unit:IsOther() then return end`,
-      `\tlocal pct = sv(self, "spell_lifesteal")`,
-      `\tif not params.unit:IsHero() then pct = pct * 0.2 end -- Dota's usual reduction against creeps`,
-      `\tlocal heal = params.damage * pct / 100`,
-      `\tparent:HealWithParams(heal, self:GetAbility(), false, true, parent, true)`,
-      `\tlocal fx = ParticleManager:CreateParticle("particles/items3_fx/octarine_core_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent)`,
-      `\tParticleManager:ReleaseParticleIndex(fx)`,
-      `end`);
+      `\tif params.unit:IsBuilding() or params.unit:IsOther() then return end`);
+    if(hasAls) L.push(
+      `\tif params.damage_category == DOTA_DAMAGE_CATEGORY_ATTACK then`,
+      `\t\tif parent:IsIllusion() then return end`,
+      `\t\tlocal heal = params.damage * sv(self, "lifesteal") / 100`,
+      `\t\tparent:HealWithParams(heal, self:GetAbility(), true, true, parent, false)`,
+      `\t\tlocal fx = ParticleManager:CreateParticle("particles/generic_gameplay/generic_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent)`,
+      `\t\tParticleManager:ReleaseParticleIndex(fx)`,
+      `\t\treturn`,
+      `\tend`);
+    if(hasSls) L.push(
+      `\tif params.damage_category == DOTA_DAMAGE_CATEGORY_SPELL then`,
+      `\t\tif bit.band(params.damage_flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL) ~= 0 then return end`,
+      `\t\tlocal pct = sv(self, "spell_lifesteal")`,
+      `\t\tif not params.unit:IsHero() then pct = pct * 0.2 end -- Dota's usual reduction against creeps`,
+      `\t\tlocal heal = params.damage * pct / 100`,
+      `\t\tparent:HealWithParams(heal, self:GetAbility(), false, true, parent, true)`,
+      `\t\tlocal fx = ParticleManager:CreateParticle("particles/items3_fx/octarine_core_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent)`,
+      `\t\tParticleManager:ReleaseParticleIndex(fx)`,
+      `\tend`);
+    L.push(`end`);
   }
   if(it.passive&&it.passive.name){
     L.push("",`-- Passive: ${it.passive.name}`); if(it.passive.desc) L.push(`-- ${it.passive.desc.replace(/\n/g," ")}`);
