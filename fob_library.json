@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 51,
- "publishedAt": 1793552473293,
+ "version": 52,
+ "publishedAt": 1793985743151,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -1269,9 +1269,55 @@
    "createdAt": 1793520026415,
    "updatedAt": 1793520026415,
    "dotaId": 8070
+  },
+  {
+   "id": "4b6c2c30292f4725",
+   "name": "Wind-Blessed bean",
+   "key": "windblessed_bean",
+   "keyEdited": false,
+   "tier": "component",
+   "category": "",
+   "categories": [],
+   "cost": 180,
+   "iconId": "",
+   "stats": {
+    "move_speed": 15
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1793985598257,
+   "updatedAt": 1793985598257,
+   "dotaId": 8082
   }
  ],
  "releases": [
+  {
+   "version": 52,
+   "publishedAt": 1793985743151,
+   "by": "HeavensDao",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Wind-Blessed bean"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 51,
    "publishedAt": 1793552473293,
