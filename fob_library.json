@@ -1,8 +1,8 @@
 {
  "format": "fob-library",
  "forge": "fob Item Forge",
- "version": 53,
- "publishedAt": 1793985765005,
+ "version": 54,
+ "publishedAt": 1795040772684,
  "config": {
   "prefix": "item_fob_",
   "idStart": 8000,
@@ -394,6 +394,39 @@
     "Mage",
     "Tank"
    ]
+  },
+  {
+   "id": "2c569f09f39d43ff",
+   "name": "Concealed Blade",
+   "key": "concealed_blade",
+   "keyEdited": false,
+   "tier": "component",
+   "category": "",
+   "categories": [],
+   "cost": 450,
+   "iconId": "",
+   "stats": {
+    "crit_chance": 10
+   },
+   "components": [],
+   "passive": {
+    "name": "",
+    "desc": ""
+   },
+   "active": {
+    "on": false,
+    "name": "",
+    "desc": "",
+    "behavior": "no_target",
+    "cooldown": 20,
+    "mana": 0,
+    "range": 0
+   },
+   "values": [],
+   "lore": "",
+   "createdAt": 1795040712712,
+   "updatedAt": 1795040712712,
+   "dotaId": 8084
   },
   {
    "id": "233c58f1c9f64feb",
@@ -1311,6 +1344,19 @@
   }
  ],
  "releases": [
+  {
+   "version": 54,
+   "publishedAt": 1795040772684,
+   "by": "monpied",
+   "notes": "",
+   "changes": {
+    "added": [
+     "Concealed Blade"
+    ],
+    "removed": [],
+    "changed": []
+   }
+  },
   {
    "version": 53,
    "publishedAt": 1793985765005,
