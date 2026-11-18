@@ -387,6 +387,8 @@ const STATS = [
   {k:"agi",label:"Agility",kv:"bonus_agility",prop:"MODIFIER_PROPERTY_STATS_AGILITY_BONUS",fn:"GetModifierBonusStats_Agility"},
   {k:"int",label:"Intellect",kv:"bonus_intellect",prop:"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS",fn:"GetModifierBonusStats_Intellect"},
   {k:"all_stats",label:"All Attributes",kv:"bonus_all_stats",attrs:true},
+  {k:"crit_chance",label:"Critical Strike Chance",pct:true,kv:"crit_chance",crit:true},
+  {k:"crit_mult",label:"Critical Strike Multiplier",pct:true,kv:"crit_multiplier",crit:true},
   {k:"lifesteal",label:"Lifesteal",pct:true,kv:"lifesteal",lifesteal:true},
   {k:"spell_lifesteal",label:"Spell Lifesteal",pct:true,kv:"spell_lifesteal",lifesteal:true},
 ];
@@ -1940,10 +1942,12 @@ function buildLua(it){
   L.push(`function ${mod}:DeclareFunctions()`,`\treturn {`);
   props.forEach(s=>L.push(`\t\t${s.prop},`));
   if(hasLs) L.push(`\t\tMODIFIER_EVENT_ON_TAKEDAMAGE,`);
+  const hasCrit=stats.some(([k])=>STAT[k]&&STAT[k].crit);
+  if(hasCrit) L.push(`\t\tMODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,`);
   if(it.passive&&it.passive.name) L.push(`\t\t-- add events for ${it.passive.name} here, e.g. MODIFIER_EVENT_ON_ATTACK_LANDED`);
   L.push(`\t}`,"end","");
   stats.forEach(([k])=>{ const s=STAT[k];
-    if(s.attrs || s.lifesteal) return;
+    if(s.attrs || s.lifesteal || s.crit) return;
     if(hasAll && ATTR.includes(k)) return;
     if(s.custom) L.push(`-- Affinity is a fob stat, not an engine property: read it from your damage code`,`-- by summing GetModifierAffinity() over the hero's item modifiers.`);
     L.push(`function ${mod}:${s.fn}() return sv(self, "${s.kv}") end`); });
@@ -1976,6 +1980,38 @@ function buildLua(it){
       `\t\tParticleManager:ReleaseParticleIndex(fx)`,
       `\tend`);
     L.push(`end`);
+  }
+  if(hasCrit){
+    L.push("",
+      `-- Critical strike: chance and multiplier add up across all of the hero's items (LoL-style),`,
+      `-- and one roll is made per attack. A crit deals CRIT_BASE% damage plus every item's multiplier bonus.`,
+      `-- Only one item modifier on the hero does the roll, so stacking items never rolls twice.`,
+      `local CRIT_BASE = 175`,
+      `local function critTotals(parent)`,
+      `\tlocal chance, mult, leader = 0, 0, nil`,
+      `\tfor _, m in pairs(parent:FindAllModifiers()) do`,
+      `\t\tlocal ab = m:GetAbility()`,
+      `\t\tif ab and ab.IsItem and ab:IsItem() and m.GetModifierPreAttack_CriticalStrike then`,
+      `\t\t\tlocal c = ab:GetSpecialValueFor("crit_chance")`,
+      `\t\t\tchance = chance + c`,
+      `\t\t\tmult = mult + ab:GetSpecialValueFor("crit_multiplier")`,
+      `\t\t\tif c > 0 and not leader then leader = m end`,
+      `\t\tend`,
+      `\tend`,
+      `\treturn math.min(chance, 100), mult, leader`,
+      `end`,
+      "",
+      `function ${mod}:GetModifierPreAttack_CriticalStrike(params)`,
+      `\tif not IsServer() then return end`,
+      `\tlocal parent = self:GetParent()`,
+      `\tif params.target and (params.target:IsBuilding() or params.target:IsOther()) then return end`,
+      `\tlocal chance, mult, leader = critTotals(parent)`,
+      `\tif leader ~= self or chance <= 0 then return end`,
+      `\t-- pseudo-random distribution, like Dota's own crits`,
+      `\tif RollPseudoRandomPercentage(chance, DOTA_PSEUDO_RANDOM_CUSTOM_GAME_1, parent) then`,
+      `\t\treturn CRIT_BASE + mult`,
+      `\tend`,
+      `end`);
   }
   if(it.passive&&it.passive.name){
     L.push("",`-- Passive: ${it.passive.name}`); if(it.passive.desc) L.push(`-- ${it.passive.desc.replace(/\n/g," ")}`);
